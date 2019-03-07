@@ -27,7 +27,7 @@ class Variable {
 
     public void decrement(){
         value--;
-//            if(value < 0) throw new IllegalArgumentException();
+        if(value < 0) throw new IllegalArgumentException(toString() + " has gone negative!");
     }
 
     public void increment(){
@@ -36,6 +36,6 @@ class Variable {
 
     @Override
     public String toString() {
-        return getName() + ": " + getValue();
+        return String.valueOf(getValue());
     }
 }

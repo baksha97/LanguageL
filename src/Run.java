@@ -7,52 +7,50 @@ import java.util.*;
 public class Run {
 
     public static void main(String ... args) throws FileNotFoundException {
-        File file = new File("pro.txt");
+//        File file = new File("pro.txt");
+        File file = new File("p2.txt");
         Scanner in = new Scanner(file);
-
-
 
         LinkedMap<String, List<Instruction>> states = new LinkedMap<>();
         HashMap<String, Variable> vals = new HashMap<>();
-
-
 
         //initialize blocks
         while(in.hasNextLine()){
             String line = in.nextLine();
             if(line.contains("[")){
                 states.put(line.replace("[","").replace("]",""), new ArrayList<>());
-//                System.out.println("Put in state: " +  line);
             }else{
                 Instruction instruction = new Instruction(line);
-                vals.put(instruction.getVarName(), new Variable(instruction.getVarName()));
                 states.get(states.lastKey()).add(instruction);
+                if(instruction.getType() == ModifyCommandType.GOTO_MACRO) continue;
+                vals.put(instruction.getVarName(), new Variable(instruction.getVarName()));
             }
         }
 
 
+        //execute blocks
+        System.out.println("init... \n");
         vals.put("X", new Variable("X", 3));
         System.out.println(vals);
 
-        //execute blocks
-        System.out.println("init... \n");
         String currentState = states.firstKey();
         List<Instruction> instructions = states.get(currentState);
 
         System.out.println(currentState);
         System.out.println(instructions);
 
-        System.out.println("Executing... \n");
-
-        int i =0;
+        System.out.println("\nExecuting...");
         while(instructions != null){
-            for(; i<instructions.size(); i++){
+            for(int i=0; i<instructions.size(); i++){
                 Instruction inst = instructions.get(i);
-//                System.out.println("cur inst: " + inst);
+
+                if(inst.isGoToMacro()){
+                    instructions = inst.getNewGoToMacro(states);
+                    break;
+                }
 
                 if(inst.isStateChangeable() && inst.willChangeState(vals)){
                     instructions = inst.executeOn(states, vals);
-                    i = 0;
                     break;
                 }else{
                     inst.executeOn(states, vals);
@@ -75,6 +73,9 @@ public class Run {
             String[] parts = line.split(" ");
             if(parts[0].equalsIgnoreCase("if")){
                 configureIf(parts);
+            }else if(parts[0].equalsIgnoreCase("GOTO")){
+                type = ModifyCommandType.GOTO_MACRO;
+                newStateName = parts[1];
             }else{
                 configureModify(parts);
             }
@@ -113,8 +114,11 @@ public class Run {
         }
 
         public boolean willChangeState(Map<String, Variable> vars){
-
             return vars.get(varName).notEqualsZero();
+        }
+
+        public boolean isGoToMacro(){
+            return type == ModifyCommandType.GOTO_MACRO;
         }
 
         public List<Instruction> executeOn(Map<String, List<Instruction>> states, Map<String, Variable> vars){
@@ -140,6 +144,10 @@ public class Run {
         @Override
         public String toString() {
             return getType() + ": " + getVarName() + " -> Next State: " + newStateName;
+        }
+
+        public List<Instruction> getNewGoToMacro(LinkedMap<String, List<Instruction>> states) {
+            return states.get(newStateName);
         }
     }
 }
