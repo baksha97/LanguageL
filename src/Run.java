@@ -17,12 +17,13 @@ public class Run {
         //initialize blocks
         while(in.hasNextLine()){
             String line = in.nextLine();
+            if(line.isEmpty()) continue;
             if(line.contains("[")){
                 states.put(line.replace("[","").replace("]",""), new ArrayList<>());
             }else{
                 Instruction instruction = new Instruction(line);
                 states.get(states.lastKey()).add(instruction);
-                if(instruction.getType() == ModifyCommandType.GOTO_MACRO) continue;
+                if(instruction.getType() == Command.GOTO_MACRO) continue;
                 vals.put(instruction.getVarName(), new Variable(instruction.getVarName()));
             }
         }
@@ -31,13 +32,11 @@ public class Run {
         //execute blocks
         System.out.println("init... \n");
         vals.put("X", new Variable("X", 3));
+        System.out.println(states);
         System.out.println(vals);
 
         String currentState = states.firstKey();
         List<Instruction> instructions = states.get(currentState);
-
-        System.out.println(currentState);
-        System.out.println(instructions);
 
         System.out.println("\nExecuting...");
         while(instructions != null){
@@ -64,8 +63,9 @@ public class Run {
     private static class Instruction {
 
         private String varName;
-        private ModifyCommandType type;
+        private Command type;
         private String newStateName;
+        private String variableNameToCopy;
 
         private boolean stateChangeable;
 
@@ -74,7 +74,7 @@ public class Run {
             if(parts[0].equalsIgnoreCase("if")){
                 configureIf(parts);
             }else if(parts[0].equalsIgnoreCase("GOTO")){
-                type = ModifyCommandType.GOTO_MACRO;
+                type = Command.GOTO_MACRO;
                 newStateName = parts[1];
             }else{
                 configureModify(parts);
@@ -85,10 +85,16 @@ public class Run {
         public void configureModify(String[] parts){
             stateChangeable = false;
             varName = parts[0];
-            if(parts[2].equals(varName) && parts[3].equals("+") && parts[4].equals("1")){
-                type = ModifyCommandType.INCREMENT;
+            if(parts[2].equals("0")){
+                type = Command.SET_ZERO_MACRO;
+            }
+            else if(!parts[2].equals(varName) && parts.length == 3){
+                type = Command.COPY_MACRO;
+                variableNameToCopy = parts[2];
+            }else if(parts[2].equals(varName) && parts[3].equals("+") && parts[4].equals("1")){
+                type = Command.INCREMENT;
             }else if(parts[2].equals(varName) && parts[3].equals("-") && parts[4].equals("1")){
-                type = ModifyCommandType.DECREMENT;
+                type = Command.DECREMENT;
             }else{
                 throw new IllegalArgumentException("Cannot create Instruction with: " + Arrays.toString(parts));
             }
@@ -97,7 +103,7 @@ public class Run {
         public void configureIf(String[] parts){
             stateChangeable = true;
             varName = parts[1];
-            type = ModifyCommandType.CONDITIONAL;
+            type = Command.CONDITIONAL;
             newStateName = parts[5];
         }
 
@@ -105,7 +111,7 @@ public class Run {
             return varName;
         }
 
-        public ModifyCommandType getType() {
+        public Command getType() {
             return type;
         }
 
@@ -118,7 +124,7 @@ public class Run {
         }
 
         public boolean isGoToMacro(){
-            return type == ModifyCommandType.GOTO_MACRO;
+            return type == Command.GOTO_MACRO;
         }
 
         public List<Instruction> executeOn(Map<String, List<Instruction>> states, Map<String, Variable> vars){
@@ -128,6 +134,12 @@ public class Run {
                     break;
                 case DECREMENT:
                     vars.get(varName).decrement();
+                    break;
+                case SET_ZERO_MACRO:
+                    vars.get(varName).setZero();
+                    break;
+                case COPY_MACRO:
+                    vars.get(varName).copyContents(vars.get(variableNameToCopy));
                     break;
                 case CONDITIONAL:
                     if(vars.get(varName).notEqualsZero()){
