@@ -8,7 +8,8 @@ public class Run {
 
     public static void main(String ... args) throws FileNotFoundException {
 //        File file = new File("pro.txt");
-        File file = new File("p2.txt");
+//        File file = new File("p2.txt");
+        File file = new File("x1minusx2.txt");
         Scanner in = new Scanner(file);
 
         LinkedMap<String, List<Instruction>> states = new LinkedMap<>();
@@ -31,7 +32,12 @@ public class Run {
 
         //execute blocks
         System.out.println("init... \n");
-        vals.put("X", new Variable("X", 3));
+//        vals.put("X", new Variable("X", 3));
+
+        ///x1-x2 input
+        vals.put("Y", new Variable("Y", 5));
+        vals.put("Z", new Variable("Z", 3));
+
         System.out.println(states);
         System.out.println(vals);
 
