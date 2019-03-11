@@ -26,7 +26,7 @@ In addition, there are 3 macro commands.
 	```
 	Do this in the text field:
 	```
-	X=X1,  Y=X2 ,  Z1=Z3
+	X=X1,  Y=X2 ,  Z1=X3
 	```
 
 ### Program Editor
