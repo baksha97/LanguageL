@@ -17,7 +17,17 @@ In addition, there are 3 macro commands.
  - In this machine, you may initialize your input in the top text field INSTEAD OF on the top of the program. Use a comma as a deliminator for each variable initialization.
 	- **Acceptable input:**
 		 `X=3`, `Y=1,X=2,Z=3`, `X=3,Y=4`, etc.
-  
+
+	Instead of this above the beginning of the program labels:
+	```
+	X  <- X1
+	Y  <- X2
+	Z1 <- X3
+	```
+	Do this in the text field:
+	```
+	X=X1,  Y=X2 ,  Z1=Z3
+	```
 
 ### Program Editor
  - Editor ignores/works around:
