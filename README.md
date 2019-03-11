@@ -92,3 +92,34 @@ Z <- Z - 1
 X <- X + 1
 GOTO C
 ```
+
+#### Program: X^2 (with Macros)
+```
+[A]
+IF X != 0 GOTO B
+Y <- X
+GOTO B2
+
+[B]
+Z1 <- X
+Z2 <- X
+GOTO C
+
+[C]
+IF Z1 != 0 GOTO A2
+GOTO E
+
+[A2]
+Z1 <- Z1 - 1
+GOTO B2
+
+[B2]
+IF Z2 != 0 GOTO C2
+Z2 <- X
+GOTO C
+
+[C2]
+Y <- Y + 1
+Z2 <- Z2 - 1
+GOTO B2
+```
