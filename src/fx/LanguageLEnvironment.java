@@ -23,6 +23,7 @@ public class LanguageLEnvironment {
 
     private int pos;
     private int executionCount;
+    private Instructable previousInst;
 
     public LanguageLEnvironment(String program, String input) {
         factory = new InstructionFactory();
@@ -33,7 +34,7 @@ public class LanguageLEnvironment {
         currentState = states.firstKey();
         instructions = states.get(currentState);
         pos = 0;
-        executionCount = 1;
+        executionCount = 0;
     }
 
     public LanguageLEnvironment(Scanner program, String input) {
@@ -102,6 +103,7 @@ public class LanguageLEnvironment {
         if (!hasInstructions()) throw new NoSuchMechanismException("There are no instructions to execute");
         executionCount++;
         Instructable inst = instructions.get(pos++);
+        previousInst = inst;
 
         if (inst instanceof GoToMacro) {
             String newStateName = ((GoToMacro) inst).getNewStateName();
@@ -133,6 +135,10 @@ public class LanguageLEnvironment {
     public Instructable getNextInstruction() {
         if (!hasInstructions()) return null;
         return instructions.get(pos);
+    }
+
+    public Instructable getPrevInstruction() {
+        return previousInst;
     }
 
     public LinkedMap<String, List<Instructable>> states() {
