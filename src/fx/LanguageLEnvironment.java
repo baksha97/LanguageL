@@ -3,7 +3,6 @@ package fx;
 import instructions.types.GoToMacro;
 import instructions.Instructable;
 import instructions.InstructionFactory;
-import instructions.InstructionType;
 import org.apache.commons.collections4.map.LinkedMap;
 
 import javax.xml.crypto.NoSuchMechanismException;
