@@ -55,18 +55,7 @@ public class LanguageLEnvironment {
 
     private void initializeProgram(String program) {
         Scanner in = new Scanner(program);
-        //initialize states
-        while (in.hasNextLine()) {
-            String line = in.nextLine();
-            if (line.isEmpty()) continue;
-            if (line.contains("[")) {
-                states.put(line.replace("[", "").replace("]", ""), new ArrayList<>());
-            } else {
-                Instructable instruction = factory.getInstruction(line);
-                states.get(states.lastKey()).add(instruction);
-                if (instruction.getType() != InstructionType.GOTO_MACRO) vars.put(instruction.getVarName(), 0);
-            }
-        }
+        initializeProgram(in);
         in.close();
     }
 
@@ -74,13 +63,13 @@ public class LanguageLEnvironment {
         //initialize states
         while (p.hasNextLine()) {
             String line = p.nextLine();
-            if (line.isEmpty()) continue;
+            if (line.isEmpty() || line.contains("//")) continue;
             if (line.contains("[")) {
                 states.put(line.replace("[", "").replace("]", ""), new ArrayList<>());
             } else {
                 Instructable instruction = factory.getInstruction(line);
                 states.get(states.lastKey()).add(instruction);
-                if (instruction.getType() != InstructionType.GOTO_MACRO) vars.put(instruction.getVarName(), 0);
+                if (instruction.getVarName() != null) vars.put(instruction.getVarName(), 0);
             }
         }
     }
