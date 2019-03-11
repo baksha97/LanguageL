@@ -1,9 +1,9 @@
 
 # Language L Editor
 This program allows creation, loading, editing, and stepping through your own computational programs with the three commands:
-1. Increment
-2. Decrement
-3. IF _ != 0 GOTO L
+1. V <- V + 1 (Increment)
+2. V <- V - 1 (Decrement)
+3. IF V != 0 GOTO L
 
 In addition, there are 3 macro commands.
 1. GOTO L
@@ -17,7 +17,17 @@ In addition, there are 3 macro commands.
  - In this machine, you may initialize your input in the top text field INSTEAD OF on the top of the program. Use a comma as a deliminator for each variable initialization.
 	- **Acceptable input:**
 		 `X=3`, `Y=1,X=2,Z=3`, `X=3,Y=4`, etc.
-  
+
+	Instead of this above the beginning of the program labels:
+	```
+	X  <- X1
+	Y  <- X2
+	Z1 <- X3
+	```
+	Do this in the text field:
+	```
+	X=X1,  Y=X2 ,  Z1=X3
+	```
 
 ### Program Editor
  - Editor ignores/works around:
@@ -91,4 +101,35 @@ GOTO E
 Z <- Z - 1
 X <- X + 1
 GOTO C
+```
+
+#### Program: X^2 (with Macros)
+```
+[A]
+IF X != 0 GOTO B
+Y <- X
+GOTO B2
+
+[B]
+Z1 <- X
+Z2 <- X
+GOTO C
+
+[C]
+IF Z1 != 0 GOTO A2
+GOTO E
+
+[A2]
+Z1 <- Z1 - 1
+GOTO B2
+
+[B2]
+IF Z2 != 0 GOTO C2
+Z2 <- X
+GOTO C
+
+[C2]
+Y <- Y + 1
+Z2 <- Z2 - 1
+GOTO B2
 ```
