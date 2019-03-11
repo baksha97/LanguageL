@@ -54,11 +54,6 @@ public class Operator implements Instructable {
     }
 
     @Override
-    public List<Instructable> getGoToMacroNewState(LinkedMap<String, List<Instructable>> states) {
-        return null;
-    }
-
-    @Override
     public String toString() {
         return "Operator{" +
                 "varName='" + varName + '\'' +

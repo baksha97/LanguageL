@@ -12,8 +12,6 @@ public interface Instructable {
 
     List<Instructable> executeOn(Map<String, List<Instructable>> states, Map<String, Integer> vars);
 
-    List<Instructable> getGoToMacroNewState(LinkedMap<String, List<Instructable>> states);
-
     String getVarName();
 
     String originalLine();

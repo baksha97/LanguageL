@@ -29,16 +29,11 @@ public class GoToMacro implements Instructable {
 
     @Override
     public String nextState(Map<String, List<Instructable>> states, Map<String, Integer> vars) {
-        return null;
+        return newStateName;
     }
 
     @Override
     public List<Instructable> executeOn(Map<String, List<Instructable>> states, Map<String, Integer> vars) {
-        return null;
-    }
-
-    @Override
-    public List<Instructable> getGoToMacroNewState(LinkedMap<String, List<Instructable>> states) {
         return states.get(newStateName);
     }
 

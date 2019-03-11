@@ -89,23 +89,10 @@ public class LanguageLEnvironment {
     public void executeNext() {
 
         if (!hasInstructions()) throw new NoSuchMechanismException("There are no instructions to execute");
+
         executionCount++;
         Instructable inst = instructions.get(pos++);
         previousInst = inst;
-
-        if (inst instanceof GoToMacro) {
-            String newStateName = ((GoToMacro) inst).getNewStateName();
-            if (!states.containsKey(newStateName)) {
-                instructions = null;
-                pos = 0;
-            }
-
-            if (inst.getGoToMacroNewState(states) != null) {
-                instructions = inst.getGoToMacroNewState(states);
-                currentState = newStateName;
-                pos = 0;
-            }
-        }
 
         if (inst.nextState(states, vars) != null) {
             currentState = inst.nextState(states, vars);

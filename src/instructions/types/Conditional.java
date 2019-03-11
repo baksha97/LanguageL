@@ -58,11 +58,6 @@ public class Conditional implements Instructable {
     }
 
     @Override
-    public List<Instructable> getGoToMacroNewState(LinkedMap<String, List<Instructable>> states) {
-        return null;
-    }
-
-    @Override
     public String toString() {
         return "Conditional{" +
                 "stateChangeable=" + stateChangeable +

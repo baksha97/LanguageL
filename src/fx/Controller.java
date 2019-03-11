@@ -103,7 +103,9 @@ public class Controller implements Initializable {
         String varsTxt = env.variables()
                 .toString()
                 .replace("{", "")
-                .replace("}", "");
+                .replace("}", "")
+                .replace("=", ": ")
+                .replace(","," || ");
         String exeCountLabel = "Execution: #" + env.getExecutionCount() + " to " + state;
         stateLabel.setText(state);
         nextInstructionLabel.setText(nextInst);

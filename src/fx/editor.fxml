@@ -87,9 +87,9 @@
                         <Font name="System Bold" size="18.0" />
                     </font>
                 </Label>
-                <Label fx:id="variablesLabel" layoutX="178.0" layoutY="106.0" prefHeight="22.0" prefWidth="635.0" text="||">
+                <Label fx:id="variablesLabel" layoutX="178.0" layoutY="106.0" prefHeight="22.0" prefWidth="635.0" text="{}">
                     <font>
-                        <Font name="Calibri" size="18.0" />
+                        <Font name="Candara" size="18.0" />
                     </font>
                 </Label>
             </AnchorPane>

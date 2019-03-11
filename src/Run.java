@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class Run {
 
     public static void main(String... args) throws FileNotFoundException {
-        File file = new File("x1minusx2.txt");
+        File file = new File("YminusZ.txt");
         Scanner in = new Scanner(file);
         LanguageLEnvironment env = new LanguageLEnvironment(in, "Y=5,Z=3");
 //        System.out.println(env.variables());
