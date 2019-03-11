@@ -1,5 +1,7 @@
-package instructions;
+package instructions.types;
 
+import instructions.Instructable;
+import instructions.InstructionType;
 import org.apache.commons.collections4.map.LinkedMap;
 
 import java.util.List;
@@ -8,17 +10,16 @@ import java.util.Map;
 public class GoToMacro implements Instructable {
 
     private final InstructionType type;
+    private final String newStateName;
+    private final String line;
+    public GoToMacro(String line, String[] parts) {
+        this.line = line;
+        type = InstructionType.GOTO_MACRO;
+        newStateName = parts[1];
+    }
 
     public String getNewStateName() {
         return newStateName;
-    }
-
-    private final String newStateName;
-
-    public GoToMacro(String[] parts){
-
-        type = InstructionType.GOTO_MACRO;
-        newStateName = parts[1];
     }
 
     @Override
@@ -27,8 +28,8 @@ public class GoToMacro implements Instructable {
     }
 
     @Override
-    public boolean willChangeState(Map<String, List<Instructable>> states, Map<String, Integer> vars) {
-        return false;
+    public String nextState(Map<String, List<Instructable>> states, Map<String, Integer> vars) {
+        return null;
     }
 
     @Override
@@ -44,6 +45,11 @@ public class GoToMacro implements Instructable {
     @Override
     public String getVarName() {
         return null;
+    }
+
+    @Override
+    public String originalLine() {
+        return line;
     }
 
     @Override

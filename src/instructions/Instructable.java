@@ -8,7 +8,7 @@ import java.util.Map;
 public interface Instructable {
     InstructionType getType();
 
-    boolean willChangeState(Map<String, List<Instructable>> states, Map<String, Integer> vars);
+    String nextState(Map<String, List<Instructable>> states, Map<String, Integer> vars);
 
     List<Instructable> executeOn(Map<String, List<Instructable>> states, Map<String, Integer> vars);
 
@@ -16,5 +16,6 @@ public interface Instructable {
 
     String getVarName();
 
+    String originalLine();
 
 }

@@ -1,5 +1,7 @@
-package instructions;
+package instructions.types;
 
+import instructions.Instructable;
+import instructions.InstructionType;
 import org.apache.commons.collections4.map.LinkedMap;
 
 import java.util.List;
@@ -7,17 +9,23 @@ import java.util.Map;
 
 public class Operator implements Instructable {
 
+    private final String varName;
+    private final InstructionType type;
+    private final String line;
+    public Operator(String line, String varName, InstructionType type) {
+        this.line = line;
+        this.varName = varName;
+        this.type = type;
+    }
+
     @Override
     public String getVarName() {
         return varName;
     }
 
-    private final String varName;
-    private final InstructionType type;
-
-    public Operator(String varName, InstructionType type){
-        this.varName = varName;
-        this.type = type;
+    @Override
+    public String originalLine() {
+        return line;
     }
 
     @Override
@@ -26,13 +34,13 @@ public class Operator implements Instructable {
     }
 
     @Override
-    public boolean willChangeState(Map<String, List<Instructable>> states, Map<String, Integer> vars) {
-        return false;
+    public String nextState(Map<String, List<Instructable>> states, Map<String, Integer> vars) {
+        return null;
     }
 
     @Override
     public List<Instructable> executeOn(Map<String, List<Instructable>> states, Map<String, Integer> vars) {
-        switch (type){
+        switch (type) {
             case INCREMENT:
                 vars.put(varName, vars.getOrDefault(varName, 0) + 1);
                 break;

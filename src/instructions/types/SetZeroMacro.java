@@ -1,5 +1,7 @@
-package instructions;
+package instructions.types;
 
+import instructions.Instructable;
+import instructions.InstructionType;
 import org.apache.commons.collections4.map.LinkedMap;
 
 import java.util.List;
@@ -7,17 +9,23 @@ import java.util.Map;
 
 public class SetZeroMacro implements Instructable {
 
+    private final String varName;
+    private final InstructionType type;
+    private String line;
+    public SetZeroMacro(String line, String[] parts) {
+        this.line = line;
+        varName = parts[0];
+        type = InstructionType.SET_ZERO_MACRO;
+    }
+
     @Override
     public String getVarName() {
         return varName;
     }
 
-    private final String varName;
-    private final InstructionType type;
-
-    public SetZeroMacro(String[] parts) {
-        varName = parts[0];
-        type = InstructionType.SET_ZERO_MACRO;
+    @Override
+    public String originalLine() {
+        return line;
     }
 
     @Override
@@ -26,8 +34,8 @@ public class SetZeroMacro implements Instructable {
     }
 
     @Override
-    public boolean willChangeState(Map<String, List<Instructable>> states, Map<String, Integer> vars) {
-        return false;
+    public String nextState(Map<String, List<Instructable>> states, Map<String, Integer> vars) {
+        return null;
     }
 
     @Override

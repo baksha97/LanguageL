@@ -1,5 +1,7 @@
-package instructions;
+package instructions.types;
 
+import instructions.Instructable;
+import instructions.InstructionType;
 import org.apache.commons.collections4.map.LinkedMap;
 
 import java.util.List;
@@ -10,8 +12,10 @@ public class CopyMacroOperator implements Instructable {
     private final String varName;
     private final String variableNameToCopy;
     private final InstructionType type;
+    private final String line;
 
-    public CopyMacroOperator(String[] parts){
+    public CopyMacroOperator(String line, String[] parts) {
+        this.line = line;
         varName = parts[0];
         type = InstructionType.COPY_MACRO;
         variableNameToCopy = parts[2];
@@ -23,8 +27,8 @@ public class CopyMacroOperator implements Instructable {
     }
 
     @Override
-    public boolean willChangeState(Map<String, List<Instructable>> states, Map<String, Integer> vars) {
-        return false;
+    public String nextState(Map<String, List<Instructable>> states, Map<String, Integer> vars) {
+        return null;
     }
 
     @Override
@@ -33,8 +37,7 @@ public class CopyMacroOperator implements Instructable {
             if (!vars.containsKey(variableNameToCopy))
                 throw new IllegalArgumentException(variableNameToCopy + " does not exist to be copied to " + varName);
             vars.put(varName, vars.get(variableNameToCopy));
-        }
-        else throw new IllegalArgumentException("Cannot modify " + varName + " with " + type);
+        } else throw new IllegalArgumentException("Cannot modify " + varName + " with " + type);
 
         return null;
     }
@@ -47,6 +50,11 @@ public class CopyMacroOperator implements Instructable {
     @Override
     public String getVarName() {
         return varName;
+    }
+
+    @Override
+    public String originalLine() {
+        return line;
     }
 
     @Override

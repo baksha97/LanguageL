@@ -1,5 +1,7 @@
-package instructions;
+package instructions.types;
 
+import instructions.Instructable;
+import instructions.InstructionType;
 import org.apache.commons.collections4.map.LinkedMap;
 
 import java.util.List;
@@ -8,22 +10,26 @@ import java.util.Map;
 public class Conditional implements Instructable {
 
     private final boolean stateChangeable;
+    private final String line;
+    private final String varName;
+    private final InstructionType type;
+    private final String newStateName;
+    public Conditional(String line, String[] parts) {
+        this.line = line;
+        stateChangeable = true;
+        varName = parts[1];
+        type = InstructionType.CONDITIONAL;
+        newStateName = parts[5];
+    }
 
     @Override
     public String getVarName() {
         return varName;
     }
 
-    private final String varName;
-    private final InstructionType type;
-    private final String newStateName;
-
-    public Conditional(String[] parts){
-
-        stateChangeable = true;
-        varName = parts[1];
-        type = InstructionType.CONDITIONAL;
-        newStateName = parts[5];
+    @Override
+    public String originalLine() {
+        return line;
     }
 
     @Override
@@ -32,8 +38,11 @@ public class Conditional implements Instructable {
     }
 
     @Override
-    public boolean willChangeState(Map<String, List<Instructable>> states, Map<String, Integer> vars) {
-        return vars.get(varName) != 0 && states.containsKey(newStateName);
+    public String nextState(Map<String, List<Instructable>> states, Map<String, Integer> vars) {
+        if (vars.get(varName) != 0 && states.containsKey(newStateName)) {
+            return newStateName;
+        }
+        return null;
     }
 
     @Override

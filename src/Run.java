@@ -1,20 +1,32 @@
+import fx.LanguageLEnvironment;
+
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.*;
+import java.util.Scanner;
 
 public class Run {
 
-    public static void main(String ... args) throws FileNotFoundException {
+    public static void main(String... args) throws FileNotFoundException {
         File file = new File("x1minusx2.txt");
         Scanner in = new Scanner(file);
         LanguageLEnvironment env = new LanguageLEnvironment(in, "Y=5,Z=3");
 //        System.out.println(env.variables());
-        int count = 0;
+        System.out.println("Starting...");
+
         while (env.hasInstructions()) {
+            System.out.println(env.getExecutionCount());
+            System.out.println(env.getCurrentState());
+            System.out.println(env.variables());
+            System.out.println(env.getNextInstruction());
+            System.out.println();
             env.executeNext();
-//            System.out.println(env.variables());
-            System.out.println(++count);
         }
+
+        System.out.println("\n" +
+                "\n\nTerminated....");
+        System.out.println(env.variables());
+        System.out.println(env.getCurrentState());
+        System.out.println(env.getNextInstruction());
 //
 //
 ////        File file = new File("pro.txt");
@@ -76,7 +88,7 @@ public class Run {
 //                    break;
 //                }
 //
-//                if(inst.willChangeState(states, vals)){
+//                if(inst.nextState(states, vals)){
 //                    instructions = inst.executeOn(states, vals);
 //                    break;
 //                }
