@@ -62,10 +62,9 @@ In addition, there are 3 macro commands.
  - [ ] Lots of testing, especially the macros.
  
 #### Screenshots
-![Setup](https://i.gyazo.com/da67674de3c1d5f49d0d32ef2e041c70.png)
+![Setup](https://i.gyazo.com/935f5f09307db89aca7e9a025d1b16fd.png)
 
-#### Step 
-![Ran](https://i.gyazo.com/69b9d0c7e8f0dac48e10d25952baa7cc.png)
+![Ran](https://i.gyazo.com/4e730ae8f3f2cfbaef00a96468ebea3c.png)
 
 
 #### Program: X to Y (no replacement)
@@ -100,6 +99,22 @@ GOTO E
 [D]
 Z <- Z - 1
 X <- X + 1
+GOTO C
+```
+
+#### Program: Y - Z (with Macros)
+```
+[C]
+IF Z != 0 GOTO A
+GOTO E
+
+[A]
+IF Y != 0 GOTO B
+GOTO A
+
+[B]
+Y <- Y - 1
+Z <- Z - 1
 GOTO C
 ```
 
