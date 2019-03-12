@@ -100,6 +100,7 @@ public class Controller implements Initializable {
 
     //Configure display
     private void updateInterface() {
+        int exCount = env.getExecutionCount();
         String state = env.getCurrentState();
         String nextInst = env.hasInstructions() ? String.valueOf(env.getNextInstruction().originalLine()) : "Halted";
         String prevInst = env.getPrevInstruction() != null ? String.valueOf(env.getPrevInstruction().originalLine()) : "None";
@@ -109,19 +110,20 @@ public class Controller implements Initializable {
                 .replace("}", "")
                 .replace("=", ": ")
                 .replace(","," || ");
-        String exeCountLabel = "Execution: #" + env.getExecutionCount() + " to " + state;
+        String exeCountLabel = "Execution: #" + exCount+ " to " + state;
         prevInstructionLabel.setText(prevInst);
         stateLabel.setText(state);
         nextInstructionLabel.setText(nextInst);
         variablesLabel.setText(varsTxt);
         countLabel.setText(exeCountLabel);
-        println("Execution: #" + env.getExecutionCount());
+        println("Execution: #" + exCount);
         printlnt("State: " + state);
         printlnt("Prev Executed: " + prevInst);
         printlnt("Current Variables: " + varsTxt);
         printlnt("Next Execution: " + nextInst);
         println("");
-        variableHistoryArea.appendText("\n" + varsTxt);
+        if(exCount == 0) variableHistoryArea.appendText(exCount + ")\t" + varsTxt);
+        else variableHistoryArea.appendText("\n"+ exCount + ")\t" + varsTxt);
     }
 
     //Menu Buttons

@@ -92,7 +92,10 @@
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <TextArea fx:id="variableHistoryArea" editable="false" layoutX="386.0" layoutY="116.0" prefHeight="54.0" prefWidth="842.0" promptText="Variable History" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="116.0" />
+            <TextArea fx:id="variableHistoryArea" editable="false" layoutX="386.0" layoutY="116.0" prefHeight="54.0" prefWidth="842.0" promptText="Variable History" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="116.0">
+               <font>
+                  <Font size="16.0" />
+               </font></TextArea>
             <Label fx:id="prevInstructionLabel" alignment="CENTER" layoutX="192.0" layoutY="4.0" prefHeight="22.0" prefWidth="623.0" text="||" AnchorPane.leftAnchor="192.0" AnchorPane.rightAnchor="38.0">
                <font>
                   <Font name="Calibri" size="18.0" />
