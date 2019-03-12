@@ -9,14 +9,12 @@ import java.util.Map;
 
 public class Conditional implements Instructable {
 
-    private final boolean stateChangeable;
     private final String line;
     private final String varName;
     private final InstructionType type;
     private final String newStateName;
     public Conditional(String line, String[] parts) {
         this.line = line;
-        stateChangeable = true;
         varName = parts[1];
         type = InstructionType.CONDITIONAL;
         newStateName = parts[5];
@@ -60,8 +58,7 @@ public class Conditional implements Instructable {
     @Override
     public String toString() {
         return "Conditional{" +
-                "stateChangeable=" + stateChangeable +
-                ", varName='" + varName + '\'' +
+                "varName='" + varName + '\'' +
                 ", type=" + type +
                 ", newStateName='" + newStateName + '\'' +
                 '}';
