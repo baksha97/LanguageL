@@ -22,6 +22,10 @@ public class LanguageLEnvironment {
     private Instructable previousInst;
 
     public LanguageLEnvironment(String program, String input) {
+        this(new Scanner(program), input);
+    }
+
+    public LanguageLEnvironment(Scanner program, String input) {
         factory = new InstructionFactory();
         states = new LinkedMap<>();
         vars = new TreeMap<>();
@@ -33,26 +37,8 @@ public class LanguageLEnvironment {
         executionCount = 0;
     }
 
-    public LanguageLEnvironment(Scanner program, String input) {
-        factory = new InstructionFactory();
-        states = new LinkedMap<>();
-        vars = new HashMap<>();
-        initializeProgram(program);
-        initializeInput(input);
-        currentState = states.firstKey();
-        instructions = states.get(currentState);
-        pos = 0;
-        executionCount = 1;
-    }
-
     public int getExecutionCount() {
         return executionCount;
-    }
-
-    private void initializeProgram(String program) {
-        Scanner in = new Scanner(program);
-        initializeProgram(in);
-        in.close();
     }
 
     private void initializeProgram(Scanner p) {
@@ -68,6 +54,7 @@ public class LanguageLEnvironment {
                 if (instruction.getVarName() != null) vars.put(instruction.getVarName(), 0);
             }
         }
+        p.close();
     }
 
     private void initializeInput(String input) {
