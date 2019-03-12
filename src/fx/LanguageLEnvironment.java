@@ -6,16 +6,13 @@ import instructions.InstructionFactory;
 import org.apache.commons.collections4.map.LinkedMap;
 
 import javax.xml.crypto.NoSuchMechanismException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 
 public class LanguageLEnvironment {
     private InstructionFactory factory;
     private LinkedMap<String, List<Instructable>> states;
-    private HashMap<String, Integer> vars;
+    private Map<String, Integer> vars;
     private List<Instructable> instructions;
 
     private String currentState;
@@ -27,7 +24,7 @@ public class LanguageLEnvironment {
     public LanguageLEnvironment(String program, String input) {
         factory = new InstructionFactory();
         states = new LinkedMap<>();
-        vars = new HashMap<>();
+        vars = new TreeMap<>();
         initializeProgram(program);
         initializeInput(input);
         currentState = states.firstKey();
@@ -120,7 +117,7 @@ public class LanguageLEnvironment {
         return states;
     }
 
-    public HashMap<String, Integer> variables() {
+    public Map<String, Integer> variables() {
         return vars;
     }
 }

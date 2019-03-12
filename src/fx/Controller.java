@@ -38,6 +38,8 @@ public class Controller implements Initializable {
     public TextField stepByField;
     public Label nextInstructionLabel;
     public Label variablesLabel;
+    public TextArea variableHistoryArea;
+    public Label prevInstructionLabel;
 
     private LanguageLEnvironment env;
     private FileChooser fileChooser;
@@ -45,6 +47,7 @@ public class Controller implements Initializable {
     //Execution Buttons
     public void onSetClick() {
         outputArea.setText("");
+        variableHistoryArea.setText("");
         saveEditor();
         if (!setupEnv()) return;
         updateInterface();
@@ -107,6 +110,7 @@ public class Controller implements Initializable {
                 .replace("=", ": ")
                 .replace(","," || ");
         String exeCountLabel = "Execution: #" + env.getExecutionCount() + " to " + state;
+        prevInstructionLabel.setText(prevInst);
         stateLabel.setText(state);
         nextInstructionLabel.setText(nextInst);
         variablesLabel.setText(varsTxt);
@@ -117,6 +121,7 @@ public class Controller implements Initializable {
         printlnt("Current Variables: " + varsTxt);
         printlnt("Next Execution: " + nextInst);
         println("");
+        variableHistoryArea.appendText("\n" + varsTxt);
     }
 
     //Menu Buttons
