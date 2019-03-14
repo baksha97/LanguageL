@@ -28,7 +28,7 @@ public class Controller implements Initializable {
             "You can find the latest source code on Github @baksha97."
                     + "\nBe sure to check out any branches for works in progress " +
                     "& please create an issue if a problem is found. " +
-                    "\n-Travis";
+                    "\n\t\t-Travis";
     private static final String DEFAULT_PROGRAM_NAME = "lang-l-current-program.txt";
 
     @FXML
@@ -106,7 +106,7 @@ public class Controller implements Initializable {
         int exCount = env.getExecutionCount();
         int plen = env.getInstructionCount();
         String state = env.getCurrentState();
-        String nextInst = env.hasInstructions() ? String.valueOf(env.getNextInstruction().originalLine()) : "Halted";
+        String nextInst = env.hasInstructions() ? String.valueOf(env.getNextInstruction().originalLine()) : "HALTED";
         String prevInst = env.getPrevInstruction() != null ? String.valueOf(env.getPrevInstruction().originalLine()) : "None";
         String varsTxt = env.variables()
                 .toString()
