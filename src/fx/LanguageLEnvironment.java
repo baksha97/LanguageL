@@ -16,7 +16,7 @@ public class LanguageLEnvironment {
     private Map<String, Integer> vars;
     private List<Instructable> instructions;
 
-    private String currentState;
+    private String currentLabel;
 
     private int pos;
     private int instructionCount;
@@ -33,7 +33,7 @@ public class LanguageLEnvironment {
         vars = new TreeMap<>();
         initializeProgram(program);
         initializeInput(input);
-        instructions = states.get(currentState);
+        instructions = states.get(currentLabel);
         pos = 0;
         executionCount = 0;
     }
@@ -46,13 +46,13 @@ public class LanguageLEnvironment {
         //initialize states
         instructionCount = 0;
         states.put(DEFAULT_UNLABLED_STATE, new ArrayList<>());
-        currentState = DEFAULT_UNLABLED_STATE;
+        currentLabel = DEFAULT_UNLABLED_STATE;
         while (p.hasNextLine()) {
             String line = p.nextLine();
             if (line.isEmpty() || line.contains("//")) continue;
             if (line.contains("[") && line.contains("]")) {
                 String state = line.replace("[", "").replace("]", "");
-                if(instructionCount == 0) currentState = state;
+                if(instructionCount == 0) currentLabel = state;
                 states.put(state, new ArrayList<>());
             } else {
                 Instructable instruction = factory.getInstruction(line);
@@ -88,7 +88,7 @@ public class LanguageLEnvironment {
         previousInst = inst;
 
         if (inst.nextState(states, vars) != null) {
-            currentState = inst.nextState(states, vars);
+            currentLabel = inst.nextState(states, vars);
             instructions = inst.executeOn(states, vars);
             pos = 0;
         } else {
@@ -96,8 +96,8 @@ public class LanguageLEnvironment {
         }
     }
 
-    public String getCurrentState() {
-        return currentState;
+    public String getCurrentLabel() {
+        return currentLabel;
     }
 
     public Instructable getNextInstruction() {

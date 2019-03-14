@@ -15,7 +15,7 @@ public class Run {
 
         while (env.hasInstructions()) {
             System.out.println(env.getExecutionCount());
-            System.out.println(env.getCurrentState());
+            System.out.println(env.getCurrentLabel());
             System.out.println(env.variables());
             System.out.println(env.getNextInstruction());
             System.out.println();
@@ -25,7 +25,7 @@ public class Run {
         System.out.println("\n" +
                 "\n\nTerminated....");
         System.out.println(env.variables());
-        System.out.println(env.getCurrentState());
+        System.out.println(env.getCurrentLabel());
         System.out.println(env.getNextInstruction());
 //
 //

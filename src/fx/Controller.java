@@ -62,10 +62,12 @@ public class Controller implements Initializable {
             println("Setup first.");
             return;
         }
+
         while (env.hasInstructions()) {
             env.executeNext();
             updateInterface();
         }
+
     }
 
     public void onStepClick() {
@@ -105,25 +107,26 @@ public class Controller implements Initializable {
     private void updateInterface() {
         int exCount = env.getExecutionCount();
         int plen = env.getInstructionCount();
-        String state = env.getCurrentState();
+        String currentLabel = env.getCurrentLabel();
         String nextInst = env.hasInstructions() ? String.valueOf(env.getNextInstruction().originalLine()) : "HALTED";
         String prevInst = env.getPrevInstruction() != null ? String.valueOf(env.getPrevInstruction().originalLine()) : "None";
         String varsTxt = env.variables()
                 .toString()
                 .replace("=", " = ");
         String snapShotText = (exCount+1 + " ,   " + varsTxt);
-        String exeCountLabel = "Execution: #" + exCount+ " to " + state;
+        String exeCountLabel = "Execution: #" + exCount+ " to " + currentLabel;
         prevInstructionLabel.setText(prevInst);
-        stateLabel.setText(state);
+        stateLabel.setText(currentLabel);
         nextInstructionLabel.setText(nextInst);
         snapshotLabel.setText(snapShotText);
         countLabel.setText(exeCountLabel);
 
         println("Execution: #" + exCount);
-        printlnt("State: " + state);
-        printlnt("Prev Executed: " + prevInst);
-        printlnt("Snapshots: " + snapShotText);
-        printlnt("Next Execution: " + nextInst);
+        printlnt("i: " + (exCount + 1));
+        printlnt("State: " + varsTxt);
+        printlnt("Prev Instruction: " + prevInst);
+        printlnt("Snapshot: " + snapShotText);
+        printlnt("Next Instruction: " + nextInst);
         println("");
         if(exCount == 0) variableHistoryArea.appendText(snapShotText);
         else variableHistoryArea.appendText("\n"+ snapShotText);
