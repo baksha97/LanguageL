@@ -1,6 +1,5 @@
 package fx;
 
-import instructions.types.GoToMacro;
 import instructions.Instructable;
 import instructions.InstructionFactory;
 import org.apache.commons.collections4.map.LinkedMap;
@@ -10,6 +9,8 @@ import java.util.*;
 
 
 public class LanguageLEnvironment {
+    private static final String DEFAULT_UNLABLED_STATE = "Unlabeled Instruction";
+
     private InstructionFactory factory;
     private LinkedMap<String, List<Instructable>> states;
     private Map<String, Integer> vars;
@@ -18,6 +19,7 @@ public class LanguageLEnvironment {
     private String currentState;
 
     private int pos;
+    private int instructionCount;
     private int executionCount;
     private Instructable previousInst;
 
@@ -31,7 +33,6 @@ public class LanguageLEnvironment {
         vars = new TreeMap<>();
         initializeProgram(program);
         initializeInput(input);
-        currentState = states.firstKey();
         instructions = states.get(currentState);
         pos = 0;
         executionCount = 0;
@@ -43,14 +44,20 @@ public class LanguageLEnvironment {
 
     private void initializeProgram(Scanner p) {
         //initialize states
+        instructionCount = 0;
+        states.put(DEFAULT_UNLABLED_STATE, new ArrayList<>());
+        currentState = DEFAULT_UNLABLED_STATE;
         while (p.hasNextLine()) {
             String line = p.nextLine();
             if (line.isEmpty() || line.contains("//")) continue;
-            if (line.contains("[")) {
-                states.put(line.replace("[", "").replace("]", ""), new ArrayList<>());
+            if (line.contains("[") && line.contains("]")) {
+                String state = line.replace("[", "").replace("]", "");
+                if(instructionCount == 0) currentState = state;
+                states.put(state, new ArrayList<>());
             } else {
                 Instructable instruction = factory.getInstruction(line);
                 states.get(states.lastKey()).add(instruction);
+                instructionCount++;
                 if (instruction.getVarName() != null) vars.put(instruction.getVarName(), 0);
             }
         }
@@ -62,7 +69,9 @@ public class LanguageLEnvironment {
         String[] inputs = input.split(",");
         for (String s : inputs) {
             String[] kv = s.split("=");
-            vars.put(kv[0], Integer.parseInt(kv[1]));
+            int val = Integer.parseInt(kv[1]);
+            if(val < 0) throw new IllegalStateException("Variables cannot be negative. " + kv[0]);
+            vars.put(kv[0], val);
         }
     }
 
@@ -104,6 +113,9 @@ public class LanguageLEnvironment {
         return states;
     }
 
+    public int getInstructionCount(){
+        return instructionCount;
+    }
     public Map<String, Integer> variables() {
         return vars;
     }

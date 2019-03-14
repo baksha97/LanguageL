@@ -26,7 +26,9 @@ public class Controller implements Initializable {
 
     private static final String ABOUT_CONTEXT_MESSAGE =
             "You can find the latest source code on Github @baksha97."
-                    + "\nBe sure to check out any branches for works in progress & please create an issue if a problem is found.";
+                    + "\nBe sure to check out any branches for works in progress " +
+                    "& please create an issue if a problem is found. " +
+                    "\n-Travis";
     private static final String DEFAULT_PROGRAM_NAME = "lang-l-current-program.txt";
 
     @FXML
@@ -37,9 +39,10 @@ public class Controller implements Initializable {
     public TextArea outputArea;
     public TextField stepByField;
     public Label nextInstructionLabel;
-    public Label variablesLabel;
+    public Label snapshotLabel;
     public TextArea variableHistoryArea;
     public Label prevInstructionLabel;
+
 
     private LanguageLEnvironment env;
     private FileChooser fileChooser;
@@ -101,29 +104,29 @@ public class Controller implements Initializable {
     //Configure display
     private void updateInterface() {
         int exCount = env.getExecutionCount();
+        int plen = env.getInstructionCount();
         String state = env.getCurrentState();
         String nextInst = env.hasInstructions() ? String.valueOf(env.getNextInstruction().originalLine()) : "Halted";
         String prevInst = env.getPrevInstruction() != null ? String.valueOf(env.getPrevInstruction().originalLine()) : "None";
         String varsTxt = env.variables()
                 .toString()
-                .replace("{", "")
-                .replace("}", "")
-                .replace("=", ": ")
-                .replace(","," || ");
+                .replace("=", " = ");
+        String snapShotText = (exCount+1 + " ,   " + varsTxt);
         String exeCountLabel = "Execution: #" + exCount+ " to " + state;
         prevInstructionLabel.setText(prevInst);
         stateLabel.setText(state);
         nextInstructionLabel.setText(nextInst);
-        variablesLabel.setText(varsTxt);
+        snapshotLabel.setText(snapShotText);
         countLabel.setText(exeCountLabel);
+
         println("Execution: #" + exCount);
         printlnt("State: " + state);
         printlnt("Prev Executed: " + prevInst);
-        printlnt("Current Variables: " + varsTxt);
+        printlnt("Snapshots: " + snapShotText);
         printlnt("Next Execution: " + nextInst);
         println("");
-        if(exCount == 0) variableHistoryArea.appendText(exCount + ")\t" + varsTxt);
-        else variableHistoryArea.appendText("\n"+ exCount + ")\t" + varsTxt);
+        if(exCount == 0) variableHistoryArea.appendText(snapShotText);
+        else variableHistoryArea.appendText("\n"+ snapShotText);
     }
 
     //Menu Buttons
