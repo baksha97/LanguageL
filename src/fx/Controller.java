@@ -34,7 +34,7 @@ public class Controller implements Initializable {
     @FXML
     public TextField inputField;
     public TextArea programArea;
-    public Label stateLabel;
+    public Label currentLabelLabel;
     public Label countLabel;
     public TextArea outputArea;
     public TextField stepByField;
@@ -65,9 +65,8 @@ public class Controller implements Initializable {
 
         while (env.hasInstructions()) {
             env.executeNext();
-            updateInterface();
         }
-
+        updateInterface();
     }
 
     public void onStepClick() {
@@ -80,13 +79,14 @@ public class Controller implements Initializable {
             int steps = Integer.valueOf(stepByField.getText().trim());
             for (int i = 0; i < steps && env.hasInstructions(); i++) {
                 env.executeNext();
-                updateInterface();
             }
         } catch (Exception e) {
             println("Unable to step.");
             println(e.getLocalizedMessage());
             e.printStackTrace();
         }
+
+        updateInterface();
     }
 
 
@@ -105,31 +105,15 @@ public class Controller implements Initializable {
 
     //Configure display
     private void updateInterface() {
-        int exCount = env.getExecutionCount();
-        int plen = env.getInstructionCount();
-        String currentLabel = env.getCurrentLabel();
-        String nextInst = env.hasInstructions() ? String.valueOf(env.getNextInstruction().originalLine()) : "HALTED";
-        String prevInst = env.getPrevInstruction() != null ? String.valueOf(env.getPrevInstruction().originalLine()) : "None";
-        String varsTxt = env.variables()
-                .toString()
-                .replace("=", " = ");
-        String snapShotText = (exCount+1 + " ,   " + varsTxt);
-        String exeCountLabel = "Execution: #" + exCount+ " to " + currentLabel;
-        prevInstructionLabel.setText(prevInst);
-        stateLabel.setText(currentLabel);
-        nextInstructionLabel.setText(nextInst);
-        snapshotLabel.setText(snapShotText);
-        countLabel.setText(exeCountLabel);
-
-        println("Execution: #" + exCount);
-        printlnt("i: " + (exCount + 1));
-        printlnt("State: " + varsTxt);
-        printlnt("Prev Instruction: " + prevInst);
-        printlnt("Snapshot: " + snapShotText);
-        printlnt("Next Instruction: " + nextInst);
-        println("");
-        if(exCount == 0) variableHistoryArea.appendText(snapShotText);
-        else variableHistoryArea.appendText("\n"+ snapShotText);
+        prevInstructionLabel.setText(env.vm.getPreviousInstruction());
+        currentLabelLabel.setText(env.vm.getCurrentLabel());
+        nextInstructionLabel.setText(env.vm.getNextInstruction());
+        snapshotLabel.setText(env.vm.getSnapshot());
+        countLabel.setText(env.vm.getExecutionCount());
+        variableHistoryArea.setText(env.getVariableHistory());
+        outputArea.setText(env.getExeHistory());
+        variableHistoryArea.positionCaret(variableHistoryArea.getLength());
+        outputArea.positionCaret(outputArea.getLength());
     }
 
     //Menu Buttons

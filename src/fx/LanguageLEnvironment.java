@@ -23,11 +23,25 @@ public class LanguageLEnvironment {
     private int executionCount;
     private Instructable previousInst;
 
+    public LanguageLEnviormentViewModel vm;
+
+    public String getExeHistory() {
+        return exexutionHistory.toString();
+    }
+
+    public String getVariableHistory() {
+        return variableHistory.toString();
+    }
+
+    private StringBuilder exexutionHistory;
+    private StringBuilder variableHistory;
+
     public LanguageLEnvironment(String program, String input) {
         this(new Scanner(program), input);
     }
 
     public LanguageLEnvironment(Scanner program, String input) {
+        vm = new LanguageLEnviormentViewModel(this);
         factory = new InstructionFactory();
         states = new LinkedMap<>();
         vars = new TreeMap<>();
@@ -36,6 +50,26 @@ public class LanguageLEnvironment {
         instructions = states.get(currentLabel);
         pos = 0;
         executionCount = 0;
+        this.exexutionHistory = new StringBuilder();
+        this.variableHistory = new StringBuilder();
+        keepHistory();
+    }
+
+    private void keepHistory(){
+        int exCount = getExecutionCount();
+        exexutionHistory.append(vm.getExecutionCount());
+        exexutionHistory.append('\n');
+        exexutionHistory.append("\tPrevious Instruction:  " +vm.getPreviousInstruction());
+        exexutionHistory.append('\n');
+        exexutionHistory.append('\t' +vm.getSnapshot());
+        exexutionHistory.append('\n');
+        exexutionHistory.append("\tLabel:  " +vm.getCurrentLabel());
+        exexutionHistory.append('\n');
+        exexutionHistory.append("\tNext Instruction:  " +vm.getNextInstruction());
+        exexutionHistory.append("\n\n");
+
+        if(exCount == 0) variableHistory.append(vm.getSnapshot());
+        else variableHistory.append("\n"+ vm.getSnapshot());
     }
 
     public int getExecutionCount() {
@@ -94,6 +128,8 @@ public class LanguageLEnvironment {
         } else {
             inst.executeOn(states, vars);
         }
+
+        keepHistory();
     }
 
     public String getCurrentLabel() {
