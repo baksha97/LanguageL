@@ -62,9 +62,9 @@ In addition, there are 3 macro commands.
  - [ ] Lots of testing, especially the macros.
  
 #### Screenshots
-![Setup](https://i.gyazo.com/935f5f09307db89aca7e9a025d1b16fd.png)
+![Setup](https://i.gyazo.com/2e45f33ad4de0fd5c305eeb1f1c85db6.png)
 
-![Ran](https://i.gyazo.com/4e730ae8f3f2cfbaef00a96468ebea3c.png)
+![Ran](https://i.gyazo.com/2b616e90275f78e2c6f45477394095b1.png)
 
 
 #### Program: X to Y (no replacement)
