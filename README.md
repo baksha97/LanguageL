@@ -59,7 +59,7 @@ In addition, there are 3 macro commands.
 
 ### TO - DO's
 
- - [ ] Lots of testing, especially the macros.
+ - [ ] ...
  
 #### Screenshots
 ![Setup](https://i.gyazo.com/2e45f33ad4de0fd5c305eeb1f1c85db6.png)
