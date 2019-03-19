@@ -70,7 +70,9 @@ public class Controller implements Initializable {
                 env.executeNext();
             }
         }catch (Exception e){
+            e.printStackTrace();
             println(e.getLocalizedMessage());
+            return;
         }
         updateInterface();
     }
