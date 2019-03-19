@@ -24,11 +24,11 @@ public class LanguageLEnviormentViewModel {
     public String getVariables(){
         return env.variables()
                 .toString()
-                .replace("=", " = ");
+                .replace(",", ",\t");
     }
 
     public String getSnapshot(){
-        return (getI() + " ,   " + getVariables());
+        return (getI() + "\t,\t" + getVariables());
     }
 
     public String getI(){
