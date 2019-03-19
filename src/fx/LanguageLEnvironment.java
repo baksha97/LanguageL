@@ -89,9 +89,9 @@ public class LanguageLEnvironment {
                 if(instructionCount == 0) currentLabel = state;
                 states.put(state, new ArrayList<>());
             } else {
-                Instructable instruction = factory.getInstruction(line);
+                Instructable instruction = factory.getInstruction(line, ++instructionCount);
                 states.get(states.lastKey()).add(instruction);
-                instructionCount++;
+//                instructionCount++;
                 if (instruction.getVarName() != null) vars.put(instruction.getVarName(), 0);
             }
         }

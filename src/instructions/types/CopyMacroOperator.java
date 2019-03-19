@@ -13,9 +13,11 @@ public class CopyMacroOperator implements Instructable {
     private final String variableNameToCopy;
     private final InstructionType type;
     private final String line;
+    private int lineNumber;
 
-    public CopyMacroOperator(String line, String[] parts) {
+    public CopyMacroOperator(String line, String[] parts, int lineNumber) {
         this.line = line;
+        this.lineNumber = lineNumber;
         varName = parts[0];
         type = InstructionType.COPY_MACRO;
         variableNameToCopy = parts[2];
@@ -50,6 +52,11 @@ public class CopyMacroOperator implements Instructable {
     @Override
     public String originalLine() {
         return line;
+    }
+
+    @Override
+    public int lineNumber() {
+        return lineNumber;
     }
 
     @Override

@@ -12,8 +12,11 @@ public class GoToMacro implements Instructable {
     private final InstructionType type;
     private final String newStateName;
     private final String line;
-    public GoToMacro(String line, String[] parts) {
+    private int lineNumber;
+
+    public GoToMacro(String line, String[] parts, int lineNumber) {
         this.line = line;
+        this.lineNumber = lineNumber;
         type = InstructionType.GOTO_MACRO;
         newStateName = parts[1];
     }
@@ -45,6 +48,11 @@ public class GoToMacro implements Instructable {
     @Override
     public String originalLine() {
         return line;
+    }
+
+    @Override
+    public int lineNumber() {
+        return lineNumber;
     }
 
     @Override

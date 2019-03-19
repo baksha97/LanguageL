@@ -12,8 +12,10 @@ public class Operator implements Instructable {
     private final String varName;
     private final InstructionType type;
     private final String line;
-    public Operator(String line, String varName, InstructionType type) {
+    private int lineNumber;
+    public Operator(String line, String varName, InstructionType type, int lineNumber) {
         this.line = line;
+        this.lineNumber = lineNumber;
         this.varName = varName;
         this.type = type;
     }
@@ -26,6 +28,11 @@ public class Operator implements Instructable {
     @Override
     public String originalLine() {
         return line;
+    }
+
+    @Override
+    public int lineNumber() {
+        return lineNumber;
     }
 
     @Override

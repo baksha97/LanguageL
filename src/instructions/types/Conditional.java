@@ -13,8 +13,10 @@ public class Conditional implements Instructable {
     private final String varName;
     private final InstructionType type;
     private final String newStateName;
-    public Conditional(String line, String[] parts) {
+    private int lineNumber;
+    public Conditional(String line, String[] parts, int lineNumber) {
         this.line = line;
+        this.lineNumber = lineNumber;
         varName = parts[1];
         type = InstructionType.CONDITIONAL;
         newStateName = parts[5];
@@ -28,6 +30,11 @@ public class Conditional implements Instructable {
     @Override
     public String originalLine() {
         return line;
+    }
+
+    @Override
+    public int lineNumber() {
+        return lineNumber;
     }
 
     @Override

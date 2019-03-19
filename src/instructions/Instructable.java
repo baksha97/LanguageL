@@ -16,4 +16,6 @@ public interface Instructable {
 
     String originalLine();
 
+    int lineNumber();
+
 }

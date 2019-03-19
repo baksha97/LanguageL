@@ -12,8 +12,10 @@ public class SetZeroMacro implements Instructable {
     private final String varName;
     private final InstructionType type;
     private String line;
-    public SetZeroMacro(String line, String[] parts) {
+    private int lineNumber;
+    public SetZeroMacro(String line, String[] parts, int lineNumber) {
         this.line = line;
+        this.lineNumber = lineNumber;
         varName = parts[0];
         type = InstructionType.SET_ZERO_MACRO;
     }
@@ -26,6 +28,11 @@ public class SetZeroMacro implements Instructable {
     @Override
     public String originalLine() {
         return line;
+    }
+
+    @Override
+    public int lineNumber() {
+        return lineNumber;
     }
 
     @Override
