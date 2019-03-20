@@ -307,7 +307,6 @@ GOTO E
 #### Program: (X1)^(X2) (with Macros)
 
 ```
-
 IF X2 != 0 GOTO A1
 Y <- Y + 1
 GOTO E
@@ -333,11 +332,6 @@ Y <- Y + 1
 Z3 <- Z3 - 1
 IF Z3 != 0 GOTO C
 IF Z1 != 0 GOTO B
-GOTO D
-
-[D]
 X2 <- X2 - 1
 IF X2 != 0 GOTO A2
-GOTO E
-
 ```
