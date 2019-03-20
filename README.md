@@ -40,6 +40,7 @@ In addition, there are 3 macro commands.
 	 - You can choose the amount of steps you would like to take per "Step" button click or `ENTER` hits. 
 	 - *HINT: If you seem to have an error in your code, narrow your clicking and your searching by using the number of steps to jump to a specific execution.*
 - If you would like to use `ENTER` to execute your program, do so in any of the text fields (not the program editor). You may also hold down the `ENTER` and watch as the variables change in real-time.
+- Since variables are not allowed to be negative in this language, the machine will halt once a variable is negative.
 
 ### File Management
 
