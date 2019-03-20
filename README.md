@@ -173,16 +173,14 @@ GOTO B2
 Z1 <- X1
 Z2 <- X2
 Z4 <- Z4 + 1
-GOTO C
 
 [C]
 IF Z1 != 0 GOTO A
 IF Z4 != 0 GOTO B
-GOTO A2
+GOTO E
 
 [A]
 Z3 <- X1
-GOTO D
 
 [D]
 Y <- Y + 1
@@ -200,7 +198,7 @@ GOTO C
 
 #### Program: X^3 (with Macros)
 
-`X1=4`
+`X=4`
 ```
 [A]
 Z99 <- X
