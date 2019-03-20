@@ -102,6 +102,32 @@ X <- X + 1
 GOTO C
 ```
 
+#### Program: X1 * X2 (with Macros)
+```
+[D4]
+IF X2 != 0 GOTO D5
+Y <- 0
+GOTO E
+
+[D5]
+IF X1 != 0 GOTO D6
+Y <- 0
+GOTO E
+
+[D6]
+X1 <- X1 - 1
+Z88 <- X2
+GOTO D7
+
+
+[D7]
+Y <- Y + 1
+Z88 <- Z88 - 1
+IF Z88 != 0 GOTO D7
+IF X1 != 0 GOTO D6
+GOTO E
+```
+
 #### Program: Y - Z (with Macros)
 ```
 [C]
