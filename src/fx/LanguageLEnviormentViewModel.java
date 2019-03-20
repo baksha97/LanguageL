@@ -37,6 +37,6 @@ public class LanguageLEnviormentViewModel {
     }
 
     public String getExecutionCount(){
-        return "Execution: #" + env.getExecutionCount() + " to " + env.getCurrentLabel();
+        return "Execution: #" + env.getExecutionCount() + " : " + env.getCurrentLabel();
     }
 }

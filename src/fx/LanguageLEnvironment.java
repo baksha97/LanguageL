@@ -3,8 +3,6 @@ package fx;
 import instructions.Instructable;
 import instructions.InstructionFactory;
 import org.apache.commons.collections4.map.LinkedMap;
-
-import javax.xml.crypto.NoSuchMechanismException;
 import java.util.*;
 
 
@@ -18,7 +16,7 @@ public class LanguageLEnvironment {
 
     private String currentLabel;
 
-    private int pos;
+    private int currentInstructionPosition;
     private int instructionCount;
     private int executionCount;
     private Instructable previousInst;
@@ -26,14 +24,14 @@ public class LanguageLEnvironment {
     public LanguageLEnviormentViewModel vm;
 
     public String getExeHistory() {
-        return exexutionHistory.toString();
+        return executionHistory.toString();
     }
 
     public String getVariableHistory() {
         return variableHistory.toString();
     }
 
-    private StringBuilder exexutionHistory;
+    private StringBuilder executionHistory;
     private StringBuilder variableHistory;
 
     public LanguageLEnvironment(String program, String input) {
@@ -46,27 +44,27 @@ public class LanguageLEnvironment {
         states = new LinkedMap<>();
         vars = new TreeMap<>();
         initializeProgram(program);
-        initializeInput(input);
         instructions = states.get(currentLabel);
-        pos = 0;
+        initializeInput(input);
+        currentInstructionPosition = 0;
         executionCount = 0;
-        this.exexutionHistory = new StringBuilder();
+        this.executionHistory = new StringBuilder();
         this.variableHistory = new StringBuilder();
         keepHistory();
     }
 
     private void keepHistory(){
         int exCount = getExecutionCount();
-        exexutionHistory.append(vm.getExecutionCount());
-        exexutionHistory.append('\n');
-        exexutionHistory.append("\tPrevious Instruction:  " +vm.getPreviousInstruction());
-        exexutionHistory.append('\n');
-        exexutionHistory.append('\t' +vm.getSnapshot());
-        exexutionHistory.append('\n');
-        exexutionHistory.append("\tLabel:  " +vm.getCurrentLabel());
-        exexutionHistory.append('\n');
-        exexutionHistory.append("\tNext Instruction:  " +vm.getNextInstruction());
-        exexutionHistory.append("\n\n");
+        executionHistory.append(vm.getExecutionCount());
+        executionHistory.append('\n');
+        executionHistory.append("\tPrevious Instruction:  " +vm.getPreviousInstruction());
+        executionHistory.append('\n');
+        executionHistory.append('\t' +vm.getSnapshot());
+        executionHistory.append('\n');
+        executionHistory.append("\tLabel:  " +vm.getCurrentLabel());
+        executionHistory.append('\n');
+        executionHistory.append("\tNext Instruction:  " +vm.getNextInstruction());
+        executionHistory.append("\n\n");
 
         if(exCount == 0) variableHistory.append(vm.getSnapshot());
         else variableHistory.append("\n"+ vm.getSnapshot());
@@ -91,7 +89,6 @@ public class LanguageLEnvironment {
             } else {
                 Instructable instruction = factory.getInstruction(line, ++instructionCount);
                 states.get(states.lastKey()).add(instruction);
-//                instructionCount++;
                 if (instruction.getVarName() != null) vars.put(instruction.getVarName(), 0);
             }
         }
@@ -110,26 +107,38 @@ public class LanguageLEnvironment {
     }
 
     public boolean hasInstructions() {
-        return instructions != null && pos < instructions.size();
+        return instructions != null && currentInstructionPosition < instructions.size();
     }
 
     public void executeNext() {
 
-        if (!hasInstructions()) throw new NoSuchMechanismException("There are no instructions to execute");
+        if (!hasInstructions()) throw new IllegalStateException("There are no instructions to execute");
 
         executionCount++;
-        Instructable inst = instructions.get(pos++);
+        Instructable inst = instructions.get(currentInstructionPosition++);
         previousInst = inst;
 
         if (inst.nextState(states, vars) != null) {
             currentLabel = inst.nextState(states, vars);
             instructions = inst.executeOn(states, vars);
-            pos = 0;
+            currentInstructionPosition = 0;
         } else {
             inst.executeOn(states, vars);
         }
 
+        checkAndUpdateState();
         keepHistory();
+    }
+
+    private void checkAndUpdateState(){
+        if(!hasInstructions()){
+            int currentLabelIndex = states.indexOf(currentLabel);
+            if(currentLabelIndex != -1 && currentLabelIndex != states.size() - 1) {
+                currentInstructionPosition = 0;
+                currentLabel = states.get(currentLabelIndex + 1);
+                instructions = states.get(currentLabel);
+            }
+        }
     }
 
     public String getCurrentLabel() {
@@ -138,20 +147,18 @@ public class LanguageLEnvironment {
 
     public Instructable getNextInstruction() {
         if (!hasInstructions()) return null;
-        return instructions.get(pos);
+        return instructions.get(currentInstructionPosition);
     }
 
     public Instructable getPrevInstruction() {
         return previousInst;
     }
 
-    public LinkedMap<String, List<Instructable>> states() {
-        return states;
-    }
 
     public int getInstructionCount(){
         return instructionCount;
     }
+
     public Map<String, Integer> variables() {
         return vars;
     }

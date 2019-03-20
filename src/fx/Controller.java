@@ -89,10 +89,10 @@ public class Controller implements Initializable {
                 env.executeNext();
             }
         } catch (Exception e) {
-            hasExeception = true;
             println("Unable to step.");
             println(e.getLocalizedMessage());
             e.printStackTrace();
+            return;
         }
 
         updateInterface();
@@ -105,6 +105,7 @@ public class Controller implements Initializable {
         } catch (Exception e) {
             hasExeception = true;
             println("Invalid input.");
+            e.printStackTrace();
             println(e.getLocalizedMessage());
             return false;
         }
@@ -122,6 +123,10 @@ public class Controller implements Initializable {
         countLabel.setText(env.vm.getExecutionCount());
         variableHistoryArea.setText(env.getVariableHistory());
         outputArea.setText(env.getExeHistory());
+        scrollDown();
+    }
+
+    private void scrollDown(){
         variableHistoryArea.positionCaret(variableHistoryArea.getLength());
         outputArea.positionCaret(outputArea.getLength());
     }
@@ -162,10 +167,6 @@ public class Controller implements Initializable {
         outputArea.appendText(o + "\n");
     }
 
-    private void printlnt(Object o) {
-        println("\t" + o);
-    }
-
     //File editor management
     private void saveEditor() {
         save_file(DEFAULT_PROGRAM_NAME);
@@ -184,6 +185,7 @@ public class Controller implements Initializable {
             Files.write(file, lines, Charset.forName("UTF-8"));
         } catch (IOException e) {
             println(e.getLocalizedMessage());
+            return;
         }
     }
 
