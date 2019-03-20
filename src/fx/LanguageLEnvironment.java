@@ -7,7 +7,7 @@ import java.util.*;
 
 
 public class LanguageLEnvironment {
-    private static final String DEFAULT_UNLABLED_STATE = "Unlabeled Instruction";
+    private static final String DEFAULT_UNLABELED_STATE = "Unlabeled Instruction";
 
     private InstructionFactory factory;
     private LinkedMap<String, List<Instructable>> states;
@@ -57,17 +57,17 @@ public class LanguageLEnvironment {
         int exCount = getExecutionCount();
         executionHistory.append(vm.getExecutionCount());
         executionHistory.append('\n');
-        executionHistory.append("\tPrevious Instruction:  " +vm.getPreviousInstruction());
+        executionHistory.append("\tPrevious Instruction:  ").append(vm.getPreviousInstruction());
         executionHistory.append('\n');
-        executionHistory.append('\t' +vm.getSnapshot());
+        executionHistory.append('\t').append(vm.getSnapshot());
         executionHistory.append('\n');
-        executionHistory.append("\tLabel:  " +vm.getCurrentLabel());
+        executionHistory.append("\tLabel:  ").append(vm.getCurrentLabel());
         executionHistory.append('\n');
-        executionHistory.append("\tNext Instruction:  " +vm.getNextInstruction());
+        executionHistory.append("\tNext Instruction:  ").append(vm.getNextInstruction());
         executionHistory.append("\n\n");
 
         if(exCount == 0) variableHistory.append(vm.getSnapshot());
-        else variableHistory.append("\n"+ vm.getSnapshot());
+        else variableHistory.append("\n").append(vm.getSnapshot());
     }
 
     public int getExecutionCount() {
@@ -77,8 +77,8 @@ public class LanguageLEnvironment {
     private void initializeProgram(Scanner p) {
         //initialize states
         instructionCount = 0;
-        states.put(DEFAULT_UNLABLED_STATE, new ArrayList<>());
-        currentLabel = DEFAULT_UNLABLED_STATE;
+        states.put(DEFAULT_UNLABELED_STATE, new ArrayList<>());
+        currentLabel = DEFAULT_UNLABELED_STATE;
         while (p.hasNextLine()) {
             String line = p.nextLine();
             if (line.isEmpty() || line.contains("//")) continue;
@@ -123,7 +123,11 @@ public class LanguageLEnvironment {
             instructions = inst.executeOn(states, vars);
             currentInstructionPosition = 0;
         } else {
-            inst.executeOn(states, vars);
+            try {
+                inst.executeOn(states, vars);
+            }catch (IllegalStateException ise){
+                instructions = null;
+            }
         }
 
         checkAndUpdateState();

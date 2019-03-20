@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Scanner;
-import java.util.concurrent.ExecutionException;
 
 
 public class Controller implements Initializable {
@@ -48,8 +47,6 @@ public class Controller implements Initializable {
     private LanguageLEnvironment env;
     private FileChooser fileChooser;
 
-    private boolean hasExeception;
-
     //Execution Buttons
     public void onSetClick() {
         outputArea.setText("");
@@ -70,8 +67,10 @@ public class Controller implements Initializable {
                 env.executeNext();
             }
         }catch (Exception e){
+            updateInterface();
             e.printStackTrace();
             println(e.getLocalizedMessage());
+            scrollDown();
             return;
         }
         updateInterface();
@@ -89,9 +88,11 @@ public class Controller implements Initializable {
                 env.executeNext();
             }
         } catch (Exception e) {
+            updateInterface();
             println("Unable to step.");
             println(e.getLocalizedMessage());
             e.printStackTrace();
+            scrollDown();
             return;
         }
 
@@ -103,7 +104,7 @@ public class Controller implements Initializable {
         try {
             env = new LanguageLEnvironment(programArea.getText().trim(), inputField.getText().trim());
         } catch (Exception e) {
-            hasExeception = true;
+            updateInterface();
             println("Invalid input.");
             e.printStackTrace();
             println(e.getLocalizedMessage());
@@ -211,7 +212,6 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        hasExeception = false;
         initializeFileChooser();
         load_file(DEFAULT_PROGRAM_NAME);
     }

@@ -13,6 +13,7 @@ public class Operator implements Instructable {
     private final InstructionType type;
     private final String line;
     private int lineNumber;
+
     public Operator(String line, String varName, InstructionType type, int lineNumber) {
         this.line = line;
         this.lineNumber = lineNumber;
