@@ -18,17 +18,6 @@ In addition, there are 3 macro commands.
 	- **Acceptable input:**
 		 `X=3`, `Y=1,X=2,Z=3`, `X=3,Y=4`, etc.
 
-	Instead of this above the beginning of the program labels:
-	```
-	X  <- X1
-	Y  <- X2
-	Z1 <- X3
-	```
-	Do this in the text field:
-	```
-	X=X1,  Y=X2 ,  Z1=X3
-	```
-
 ### Program Editor
  - Editor ignores/works around:
 	 - Empty lines (space out your work)
@@ -40,12 +29,14 @@ In addition, there are 3 macro commands.
     res
     Y1
     ```
+    ... Try to stay away from doing this in your final solution as this does not really conform to the language rules.
+    
  - Every time you click "Step" or "Run," the current program in the editor is saved automatically to a text-file `"lang-l-current-program.txt"` in your current working directory. This is so that if you accidentally program yourself into an infinite loop and the machine freezes, you have your work saved.
  - The editor automatically loads `"lang-l-current-program.txt"` if it is located in the current working directory.
 
 ### Execution
  - Once you've set your program by clicking "Setup/Reset" or using `SHIFT-ENTER`, you may now run your program or step through it.
-	 - Every time you step through your program, you will leave a history in the output area to go back and revise previous steps and executions.
+	 - Every time you step through your program, you will leave a history in the output area to go back and revise previous steps, executions, and snapshots.
 	 - You can choose the amount of steps you would like to take per "Step" button click or `ENTER` hits. 
 	 - *HINT: If you seem to have an error in your code, narrow your clicking and your searching by using the number of steps to jump to a specific execution.*
 - If you would like to use `ENTER` to execute your program, do so in any of the text fields (not the program editor). You may also hold down the `ENTER` and watch as the variables change in real-time.
