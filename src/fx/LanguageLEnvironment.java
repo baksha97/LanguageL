@@ -3,6 +3,7 @@ package fx;
 import instructions.Instructable;
 import instructions.InstructionFactory;
 import org.apache.commons.collections4.map.LinkedMap;
+
 import java.util.*;
 
 
@@ -53,7 +54,7 @@ public class LanguageLEnvironment {
         keepHistory();
     }
 
-    private void keepHistory(){
+    private void keepHistory() {
         int exCount = getExecutionCount();
         executionHistory.append(vm.getExecutionCount());
         executionHistory.append('\n');
@@ -66,7 +67,7 @@ public class LanguageLEnvironment {
         executionHistory.append("\tNext Instruction:  ").append(vm.getNextInstruction());
         executionHistory.append("\n\n");
 
-        if(exCount == 0) variableHistory.append(vm.getSnapshot());
+        if (exCount == 0) variableHistory.append(vm.getSnapshot());
         else variableHistory.append("\n").append(vm.getSnapshot());
     }
 
@@ -84,7 +85,7 @@ public class LanguageLEnvironment {
             if (line.isEmpty() || line.contains("//")) continue;
             if (line.contains("[") && line.contains("]")) {
                 String state = line.replace("[", "").replace("]", "");
-                if(instructionCount == 0) currentLabel = state;
+                if (instructionCount == 0) currentLabel = state;
                 states.put(state, new ArrayList<>());
             } else {
                 Instructable instruction = factory.getInstruction(line, ++instructionCount);
@@ -101,7 +102,7 @@ public class LanguageLEnvironment {
         for (String s : inputs) {
             String[] kv = s.split("=");
             int val = Integer.parseInt(kv[1]);
-            if(val < 0) throw new IllegalStateException("Variables cannot be negative. " + kv[0]);
+            if (val < 0) throw new IllegalStateException("Variables cannot be negative. " + kv[0]);
             vars.put(kv[0], val);
         }
     }
@@ -123,21 +124,17 @@ public class LanguageLEnvironment {
             instructions = inst.executeOn(states, vars);
             currentInstructionPosition = 0;
         } else {
-            try {
-                inst.executeOn(states, vars);
-            }catch (IllegalStateException ise){
-                instructions = null;
-            }
+            inst.executeOn(states, vars);
         }
 
         checkAndUpdateState();
         keepHistory();
     }
 
-    private void checkAndUpdateState(){
-        if(!hasInstructions()){
+    private void checkAndUpdateState() {
+        if (!hasInstructions()) {
             int currentLabelIndex = states.indexOf(currentLabel);
-            if(currentLabelIndex != -1 && currentLabelIndex != states.size() - 1) {
+            if (currentLabelIndex != -1 && currentLabelIndex != states.size() - 1) {
                 currentInstructionPosition = 0;
                 currentLabel = states.get(currentLabelIndex + 1);
                 instructions = states.get(currentLabel);
@@ -159,7 +156,7 @@ public class LanguageLEnvironment {
     }
 
 
-    public int getInstructionCount(){
+    public int getInstructionCount() {
         return instructionCount;
     }
 

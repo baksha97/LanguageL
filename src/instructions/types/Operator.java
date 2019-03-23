@@ -54,7 +54,9 @@ public class Operator implements Instructable {
                 break;
             case DECREMENT:
                 vars.put(varName, vars.getOrDefault(varName, 0) - 1);
-                if(vars.get(varName) < 0) throw new IllegalStateException("Variables cannot be negative. " + varName);
+                if(vars.get(varName) < 0){
+                    vars.put(varName, 0);
+                }
                 break;
             default:
                 throw new IllegalArgumentException("Cannot create Operator Instruction for" + type + " on " + varName);
