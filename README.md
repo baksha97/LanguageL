@@ -109,8 +109,6 @@ GOTO E
 [D6]
 X1 <- X1 - 1
 Z88 <- X2
-GOTO D7
-
 
 [D7]
 Y <- Y + 1
@@ -146,7 +144,6 @@ GOTO B2
 [B]
 Z1 <- X
 Z2 <- X
-GOTO C
 
 [C]
 IF Z1 != 0 GOTO A2
@@ -154,7 +151,6 @@ GOTO E
 
 [A2]
 Z1 <- Z1 - 1
-GOTO B2
 
 [B2]
 IF Z2 != 0 GOTO C2
@@ -210,7 +206,6 @@ GOTO B2
 [B]
 Z1 <- X
 Z2 <- X
-GOTO C
 
 [C]
 IF Z1 != 0 GOTO A2
@@ -248,7 +243,6 @@ GOTO B2
 [B]
 Z1 <- X
 Z2 <- X
-GOTO C
 
 [C]
 IF Z1 != 0 GOTO A2
@@ -276,22 +270,17 @@ GOTO B2
 Z101 <- Z101 + 1
 Z101 <- Z101 + 1
 Z101 <- Z101 + 1
-GOTO B4
 
 [B4]
 Z101 <- Z101 - 1
 Z88 <- X2
-GOTO C4
-
 
 [C4]
-
 Y <- Y + 1
 Z88 <- Z88 - 1
 IF Z88 != 0 GOTO C4
 IF Z101 != 0 GOTO B4
-
-GOTO E
+//GOTO E
 ```
 
 #### Program: (X1)^(X2) (with Macros)
@@ -315,7 +304,6 @@ Y <- 0
 [B]
 Z1 <- Z1 - 1
 Z3 <- Z2
-GOTO C
 
 [C]
 Y <- Y + 1
