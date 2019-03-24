@@ -1,9 +1,10 @@
 
 # Language L Editor
-This program allows creation, loading, editing, and stepping through your own computational programs with the three commands:
+This program allows creation, loading, editing, and stepping through your own computational programs with the four commands:
 1. V <- V + 1 (Increment)
 2. V <- V - 1 (Decrement)
-3. IF V != 0 GOTO L
+3. V <- V (Dummy)
+4. IF V != 0 GOTO L
 
 In addition, there are 3 macro commands.
 1. GOTO L
@@ -40,7 +41,7 @@ In addition, there are 3 macro commands.
 	 - You can choose the amount of steps you would like to take per "Step" button click or `ENTER` hits. 
 	 - *HINT: If you seem to have an error in your code, narrow your clicking and your searching by using the number of steps to jump to a specific execution.*
 - If you would like to use `ENTER` to execute your program, do so in any of the text fields (not the program editor). You may also hold down the `ENTER` and watch as the variables change in real-time.
-- Since variables are not allowed to be negative in this language, the machine will halt once a variable is negative.
+- Since variables are not allowed to be negative in this language, the machine will ignore decrements at 0.
 
 ### File Management
 
@@ -51,7 +52,7 @@ In addition, there are 3 macro commands.
 
 ### TO - DO's
 
- - [ ] ...
+ - [ ] Add line numbers for each instruction. (Requires new JFX lib)
  
 #### Screenshots
 ![Setup](https://i.gyazo.com/2e45f33ad4de0fd5c305eeb1f1c85db6.png)
@@ -286,17 +287,11 @@ IF Z101 != 0 GOTO B4
 #### Program: (X1)^(X2) (with Macros)
 
 ```
-IF X2 != 0 GOTO A1
+IF X2 != 0 GOTO A
 Y <- Y + 1
 GOTO E
 
-[A1]
-Y <- X1
-X2 <- X2 - 1
-IF X2 != 0 GOTO A2
-GOTO E
-
-[A2]
+[A]
 Z1 <- X1
 Z2 <- Y
 Y <- 0
@@ -311,5 +306,5 @@ Z3 <- Z3 - 1
 IF Z3 != 0 GOTO C
 IF Z1 != 0 GOTO B
 X2 <- X2 - 1
-IF X2 != 0 GOTO A2
+IF X2 != 0 GOTO A
 ```
