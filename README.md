@@ -1,6 +1,6 @@
 
 # Language L Editor
-This program allows creation, loading, editing, and stepping through your own computational programs with the three commands:
+This program allows creation, loading, editing, and stepping through your own computational programs with the four commands:
 1. V <- V + 1 (Increment)
 2. V <- V - 1 (Decrement)
 3. V <- V (Dummy)
