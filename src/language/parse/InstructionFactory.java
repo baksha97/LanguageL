@@ -1,7 +1,5 @@
 package language.parse;
 
-import language.Instruction;
-
 import java.util.Arrays;
 
 public class InstructionFactory {
@@ -10,21 +8,18 @@ public class InstructionFactory {
 
         try {
             String possibleVarName = parts[0];
-            if (parts[0].equalsIgnoreCase("if")) {
+            if (parts[0].equalsIgnoreCase("if"))
                 return new Instruction(InstructionType.CONDITIONAL, lineNumber, line);
-            } else if (parts[0].equalsIgnoreCase("GOTO")) {
+            else if (parts[0].equalsIgnoreCase("GoTo"))
                 return new Instruction(InstructionType.GOTO, lineNumber, line);
-            } else if (parts[2].equals("0")) {
-                return new Instruction(InstructionType.SET_ZERO, lineNumber, line);
-            } else if (parts[1].equals("<-") && parts.length == 3) { //} else if (!parts[2].equals(possibleVarName) && parts.length == 3) {
+            else if (parts[2].equals("0")) return new Instruction(InstructionType.SET_ZERO, lineNumber, line);
+            else if (parts.length == 3)
                 return new Instruction(InstructionType.COPY, lineNumber, line);
-            } else if (parts[2].equals(possibleVarName) && parts[3].equals("+") && parts[4].equals("1")) {
+            else if (parts[2].equals(possibleVarName) && parts[3].equals("+") && parts[4].equals("1"))
                 return new Instruction(InstructionType.INCREMENT, lineNumber, line);
-            } else if (parts[2].equals(possibleVarName) && parts[3].equals("-") && parts[4].equals("1")) {
+            else if (parts[2].equals(possibleVarName) && parts[3].equals("-") && parts[4].equals("1"))
                 return new Instruction(InstructionType.DECREMENT, lineNumber, line);
-            }else{
-                throw new IllegalArgumentException();
-            }
+            throw new IllegalArgumentException();
         }catch (Exception e){
             throw new IllegalArgumentException("Cannot create Instruction with: " + Arrays.toString(parts) + " at " + lineNumber);
         }

@@ -47,7 +47,7 @@ public class Run {
 //            }else{
 //                Instructable instruction = factory.getInstruction(line);
 //                states.get(states.lastKey()).add(instruction);
-//                if(instruction.getType() != InstructionType.GOTO) vals.put(instruction.getVarName(), 0);
+//                if(instruction.getType() != InstructionType.GoTo) vals.put(instruction.getVarName(), 0);
 //            }
 //        }
 //

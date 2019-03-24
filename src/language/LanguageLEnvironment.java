@@ -1,67 +1,39 @@
-package fx;
+package language;
 
-import language.RuntimeMemory;
-import language.parse.InstructionFactory;
-import language.Instruction;
+import language.memory.InstructionMemory;
 import language.memory.VariableMemory;
-import java.util.*;
+import language.parse.Instruction;
+import language.parse.InstructionFactory;
+import language.parse.InstructionType;
+
+import java.util.Scanner;
 
 
 public class LanguageLEnvironment {
 
+    public LanguageLEnvironmentViewModel vm;
     private InstructionFactory factory;
     private VariableMemory vars;
-    private RuntimeMemory runtime;
+    private InstructionMemory runtime;
 
-
-    public LanguageLEnviormentViewModel vm;
-
-    public String getExeHistory() {
-        return executionHistory.toString();
-    }
-
-    public String getVariableHistory() {
-        return variableHistory.toString();
-    }
-
+    private boolean keepHistory;
     private StringBuilder executionHistory;
     private StringBuilder variableHistory;
 
     public LanguageLEnvironment(String program, String input) {
         this(new Scanner(program), input);
     }
-
     public LanguageLEnvironment(Scanner program, String input) {
-        vm = new LanguageLEnviormentViewModel(this);
+        vm = new LanguageLEnvironmentViewModel(this);
         factory = new InstructionFactory();
         vars = new VariableMemory();
-        runtime = new RuntimeMemory(vars);
+        runtime = new InstructionMemory(vars);
+        keepHistory = true;
         initializeProgram(program);
         initializeVariables(input);
         this.executionHistory = new StringBuilder();
         this.variableHistory = new StringBuilder();
         keepHistory();
-    }
-
-    private void keepHistory() {
-        int exCount = getExecutionCount();
-        executionHistory.append(vm.getExecutionCount());
-        executionHistory.append('\n');
-        executionHistory.append("\tPrevious Instruction:  ").append(vm.getPreviousInstruction());
-        executionHistory.append('\n');
-        executionHistory.append('\t').append(vm.getSnapshot());
-        executionHistory.append('\n');
-        executionHistory.append("\tLabel:  ").append(vm.getCurrentLabel());
-        executionHistory.append('\n');
-        executionHistory.append("\tNext Instruction:  ").append(vm.getNextInstruction());
-        executionHistory.append("\n\n");
-
-        if (exCount == 0) variableHistory.append(vm.getSnapshot());
-        else variableHistory.append("\n").append(vm.getSnapshot());
-    }
-
-    public int getExecutionCount() {
-        return runtime.getExecutionCount();
     }
 
     private void initializeProgram(Scanner p) {
@@ -70,13 +42,19 @@ public class LanguageLEnvironment {
         while (p.hasNextLine()) {
             String line = p.nextLine();
             if (line.isEmpty() || line.contains("//")) continue;
+
             if (line.contains("[") && line.contains("]")) {
                 String label = line.replace("[", "").replace("]", "");
                 runtime.addLabel(label);
             } else {
                 Instruction instruction = factory.getInstruction(line, ++instructionCount);
                 runtime.addInstructionToLastLabel(instruction);
-                if(instruction.getWorkingVariable() != null) vars.init(instruction.getWorkingVariable());
+                if (instruction.getWorkingVariable() != null){
+                    vars.init(instruction.getWorkingVariable());
+                    if(instruction.getType() == InstructionType.COPY){
+                        vars.init(instruction.getCopyVariable());
+                    }
+                }
             }
         }
         p.close();
@@ -91,6 +69,32 @@ public class LanguageLEnvironment {
             if (val < 0) throw new IllegalStateException("Variables cannot be negative. " + kv[0]);
             vars.put(kv[0], val);
         }
+    }
+
+    private void keepHistory() {
+        if(!keepHistory) return;
+        int exCount = getExecutionCount();
+        executionHistory.append(vm.getExecutionCount())
+                .append('\n')
+                .append("\tPrevious Instruction:  ").append(vm.getPreviousInstruction())
+                .append('\n')
+                .append('\t').append(vm.getSnapshot())
+                .append('\n')
+                .append("\tLabel:  ").append(vm.getCurrentLabel())
+                .append('\n')
+                .append("\tNext Instruction:  ").append(vm.getNextInstruction())
+                .append("\n\n");
+
+        if (exCount == 0) variableHistory.append(vm.getSnapshot());
+        else variableHistory.append("\n").append(vm.getSnapshot());
+    }
+
+    public void startKeepingHistory(){
+        keepHistory = true;
+    }
+
+    public void stopKeepingHistory(){
+        keepHistory = false;
     }
 
     public boolean hasInstructions() {
@@ -115,6 +119,17 @@ public class LanguageLEnvironment {
         return runtime.getPrevInstruction();
     }
 
+    public String getExeHistory() {
+        return executionHistory.toString();
+    }
+
+    public String getVariableHistory() {
+        return variableHistory.toString();
+    }
+
+    public int getExecutionCount() {
+        return runtime.getExecutionCount();
+    }
 
     public int getInstructionCount() {
         return runtime.getInstructionCount();

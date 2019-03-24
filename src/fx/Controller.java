@@ -2,12 +2,10 @@ package fx;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
+import language.LanguageLEnvironment;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,23 +40,29 @@ public class Controller implements Initializable {
     public Label snapshotLabel;
     public TextArea variableHistoryArea;
     public Label prevInstructionLabel;
+    public CheckBox noHistoryCheck;
 
 
     private LanguageLEnvironment env;
     private FileChooser fileChooser;
 
+    private boolean needsReset;
+
     //Execution Buttons
     public void onSetClick() {
+
         outputArea.setText("");
         variableHistoryArea.setText("");
         saveEditor();
         if (!setupEnv()) return;
+        onHistoryOffTick();
         updateInterface();
     }
 
     public void onRunClick() {
         saveEditor();
-        if (env == null) {
+
+        if (env == null || needsReset) {
             println("Setup first.");
             return;
         }
@@ -66,48 +70,59 @@ public class Controller implements Initializable {
             while (env.hasInstructions()) {
                 env.executeNext();
             }
+            updateInterface();
         }catch (Exception e){
             updateInterface();
             e.printStackTrace();
             println(e.getLocalizedMessage());
             scrollDown();
-            return;
+            needsReset = true;
         }
-        updateInterface();
     }
 
     public void onStepClick() {
         saveEditor();
-        if (env == null) {
+        if (env == null || needsReset) {
             println("Setup first.");
             return;
         }
+
         try {
             int steps = Integer.valueOf(stepByField.getText().trim());
             for (int i = 0; i < steps && env.hasInstructions(); i++) {
-                env.executeNext();
+                    env.executeNext();
             }
+            updateInterface();
         } catch (Exception e) {
             updateInterface();
             println("Unable to step.");
             println(e.getLocalizedMessage());
             e.printStackTrace();
             scrollDown();
-            return;
+            needsReset = true;
         }
+    }
 
-        updateInterface();
+    public void onHistoryOffTick(){
+        if(env == null) return;
+        if(noHistoryCheck.isSelected()){
+            env.stopKeepingHistory();
+        }else {
+            env.startKeepingHistory();
+        }
     }
 
 
     private boolean setupEnv() {
         try {
             env = new LanguageLEnvironment(programArea.getText().trim(), inputField.getText().trim());
+            needsReset = false;
         } catch (Exception e) {
             updateInterface();
             println("Invalid input.");
             e.printStackTrace();
             println(e.getLocalizedMessage());
+            needsReset = true;
             return false;
         }
 
@@ -122,8 +137,10 @@ public class Controller implements Initializable {
         nextInstructionLabel.setText(env.vm.getNextInstruction());
         snapshotLabel.setText(env.vm.getSnapshot());
         countLabel.setText(env.vm.getExecutionCount());
-        variableHistoryArea.setText(env.getVariableHistory());
-        outputArea.setText(env.getExeHistory());
+        if(!noHistoryCheck.isSelected()){
+            variableHistoryArea.setText(env.getVariableHistory());
+            outputArea.setText(env.getExeHistory());
+        }
         scrollDown();
     }
 
@@ -214,6 +231,7 @@ public class Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         initializeFileChooser();
         load_file(DEFAULT_PROGRAM_NAME);
+        needsReset = false;
     }
 }
 

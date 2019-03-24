@@ -1,12 +1,12 @@
-package language;
+package language.memory;
 
-import language.memory.VariableMemory;
+import language.parse.Instruction;
 import org.apache.commons.collections4.map.LinkedMap;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RuntimeMemory {
+public class InstructionMemory {
     private static final String DEFAULT_UNLABELED_LABEL = "Unlabeled Instruction";
 
     private LinkedMap<String, List<Instruction>> instructionMap;
@@ -20,7 +20,7 @@ public class RuntimeMemory {
     private VariableMemory vars;
 
 
-    public RuntimeMemory(VariableMemory vars) {
+    public InstructionMemory(VariableMemory vars) {
         this.vars = vars;
         instructionMap = new LinkedMap<>();
         currentInstructionPosition = 0;

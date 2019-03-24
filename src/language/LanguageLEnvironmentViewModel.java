@@ -1,10 +1,10 @@
-package fx;
+package language;
 
-public class LanguageLEnviormentViewModel {
+public class LanguageLEnvironmentViewModel {
 
     private LanguageLEnvironment env;
 
-    public LanguageLEnviormentViewModel(LanguageLEnvironment env){
+    public LanguageLEnvironmentViewModel(LanguageLEnvironment env){
         this.env = env;
     }
 
