@@ -286,17 +286,11 @@ IF Z101 != 0 GOTO B4
 #### Program: (X1)^(X2) (with Macros)
 
 ```
-IF X2 != 0 GOTO A1
+IF X2 != 0 GOTO A
 Y <- Y + 1
 GOTO E
 
-[A1]
-Y <- X1
-X2 <- X2 - 1
-IF X2 != 0 GOTO A2
-GOTO E
-
-[A2]
+[A]
 Z1 <- X1
 Z2 <- Y
 Y <- 0
@@ -311,5 +305,5 @@ Z3 <- Z3 - 1
 IF Z3 != 0 GOTO C
 IF Z1 != 0 GOTO B
 X2 <- X2 - 1
-IF X2 != 0 GOTO A2
+IF X2 != 0 GOTO A
 ```
