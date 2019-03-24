@@ -3,7 +3,8 @@
 This program allows creation, loading, editing, and stepping through your own computational programs with the three commands:
 1. V <- V + 1 (Increment)
 2. V <- V - 1 (Decrement)
-3. IF V != 0 GOTO L
+3. V <- V (Dummy)
+4. IF V != 0 GOTO L
 
 In addition, there are 3 macro commands.
 1. GOTO L
