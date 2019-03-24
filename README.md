@@ -240,10 +240,10 @@ Z4 <- Z4 - 1
 IF Z4 != 0 GOTO A
 
 [D]
-IF X2 != 0 GOTO F
+IF X2 != 0 GOTO D2
 GOTO E
 
-[F]
+[D2]
 X2 <- X2 - 1
 Y <- Y + 1
 Y <- Y + 1
