@@ -137,31 +137,25 @@ GOTO C
 
 #### Program: X^2 (with Macros)
 ```
+Z4 <- Z4 + 1
+Z4 <- Z4 + 1
+
 [A]
-IF X != 0 GOTO B
-Y <- X
-GOTO B2
+Z1 <- X
+Z2 <- Y
+Y <- 0
 
 [B]
-Z1 <- X
-Z2 <- X
+Z1 <- Z1 - 1
+Z3 <- Z2
 
 [C]
-IF Z1 != 0 GOTO A2
-GOTO E
-
-[A2]
-Z1 <- Z1 - 1
-
-[B2]
-IF Z2 != 0 GOTO C2
-Z2 <- X
-GOTO C
-
-[C2]
 Y <- Y + 1
-Z2 <- Z2 - 1
-GOTO B2
+Z3 <- Z3 - 1
+IF Z3 != 0 GOTO C
+IF Z1 != 0 GOTO B
+Z4 <- Z4 - 1
+IF Z4 != 0 GOTO A
 ```
 
 #### Program: X^3 (with Macros / Professor's)
@@ -198,37 +192,26 @@ GOTO C
 
 `X=4`
 ```
+Z4 <- Z4 + 1
+Z4 <- Z4 + 1
+Z4 <- Z4 + 1
+
 [A]
-Z99 <- X
-IF X != 0 GOTO B
-Y <- X
-GOTO B2
+Z1 <- X
+Z2 <- Y
+Y <- 0
 
 [B]
-Z1 <- X
-Z2 <- X
+Z1 <- Z1 - 1
+Z3 <- Z2
 
 [C]
-IF Z1 != 0 GOTO A2
-Z1 <- X
-Z99 <- Z99 - 1
-IF Z99 != 0 GOTO A2
-GOTO E
-
-[A2]
-Z1 <- Z1 - 1
-GOTO B2
-
-[B2]
-IF Z2 != 0 GOTO C2
-Z2 <- X
-GOTO C
-
-[C2]
 Y <- Y + 1
-Z2 <- Z2 - 1
-GOTO B2
-
+Z3 <- Z3 - 1
+IF Z3 != 0 GOTO C
+IF Z1 != 0 GOTO B
+Z4 <- Z4 - 1
+IF Z4 != 0 GOTO A
 ```
 
 #### Program: X1^3 + 3(X2) (with Macros)
