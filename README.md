@@ -233,55 +233,39 @@ GOTO B2
 
 #### Program: X1^3 + 3(X2) (with Macros)
 
-`X=3, X2=2`
+`X1=10, X2=3`
 ```
+Z4 <- Z4 + 1
+Z4 <- Z4 + 1
+Z4 <- Z4 + 1
+
 [A]
-Z99 <- X
-IF X != 0 GOTO B
-Y <- X
-GOTO B2
+Z1 <- X1
+Z2 <- Y
+Y <- 0
 
 [B]
-Z1 <- X
-Z2 <- X
+Z1 <- Z1 - 1
+Z3 <- Z2
 
 [C]
-IF Z1 != 0 GOTO A2
-Z1 <- X
-Z99 <- Z99 - 1
-IF Z99 != 0 GOTO A2
-GOTO A4
-
-[A2]
-Z1 <- Z1 - 1
-GOTO B2
-
-[B2]
-IF Z2 != 0 GOTO C2
-Z2 <- X
-GOTO C
-
-[C2]
 Y <- Y + 1
-Z2 <- Z2 - 1
-GOTO B2
+Z3 <- Z3 - 1
+IF Z3 != 0 GOTO C
+IF Z1 != 0 GOTO B
+Z4 <- Z4 - 1
+IF Z4 != 0 GOTO A
 
+[D]
+IF X2 != 0 GOTO F
+GOTO E
 
-[A4]
-Z101 <- Z101 + 1
-Z101 <- Z101 + 1
-Z101 <- Z101 + 1
-
-[B4]
-Z101 <- Z101 - 1
-Z88 <- X2
-
-[C4]
+[F]
+X2 <- X2 - 1
 Y <- Y + 1
-Z88 <- Z88 - 1
-IF Z88 != 0 GOTO C4
-IF Z101 != 0 GOTO B4
-//GOTO E
+Y <- Y + 1
+Y <- Y + 1
+GOTO D
 ```
 
 #### Program: (X1)^(X2) (with Macros)
