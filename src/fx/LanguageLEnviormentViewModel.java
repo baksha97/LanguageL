@@ -13,12 +13,12 @@ public class LanguageLEnviormentViewModel {
     }
 
     public String getNextInstruction(){
-        return  env.hasInstructions() ? String.valueOf(env.getNextInstruction().originalLine()) : "HALTED";
+        return  env.hasInstructions() ? String.valueOf(env.getNextInstruction().getLine()) : "HALTED";
     }
 
     public String getPreviousInstruction(){
         return env.getPrevInstruction() != null ?
-                String.valueOf(env.getPrevInstruction().originalLine()) : "No Previous Instruction";
+                String.valueOf(env.getPrevInstruction().getLine()) : "No Previous Instruction";
     }
 
     public String getVariables(){
@@ -33,7 +33,7 @@ public class LanguageLEnviormentViewModel {
 
     public String getI(){
         if(env.getNextInstruction() == null) return "i: " + (env.getInstructionCount() + 1);
-        return "i: " + (env.getNextInstruction().lineNumber());
+        return "i: " + (env.getNextInstruction().getLineNumber());
     }
 
     public String getExecutionCount(){

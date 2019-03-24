@@ -1,26 +1,18 @@
 package fx;
 
-import instructions.Instructable;
-import instructions.InstructionFactory;
-import org.apache.commons.collections4.map.LinkedMap;
-
+import language.RuntimeMemory;
+import language.parse.InstructionFactory;
+import language.Instruction;
+import language.memory.VariableMemory;
 import java.util.*;
 
 
 public class LanguageLEnvironment {
-    private static final String DEFAULT_UNLABELED_STATE = "Unlabeled Instruction";
 
     private InstructionFactory factory;
-    private LinkedMap<String, List<Instructable>> states;
-    private Map<String, Integer> vars;
-    private List<Instructable> instructions;
+    private VariableMemory vars;
+    private RuntimeMemory runtime;
 
-    private String currentLabel;
-
-    private int currentInstructionPosition;
-    private int instructionCount;
-    private int executionCount;
-    private Instructable previousInst;
 
     public LanguageLEnviormentViewModel vm;
 
@@ -42,13 +34,10 @@ public class LanguageLEnvironment {
     public LanguageLEnvironment(Scanner program, String input) {
         vm = new LanguageLEnviormentViewModel(this);
         factory = new InstructionFactory();
-        states = new LinkedMap<>();
-        vars = new TreeMap<>();
+        vars = new VariableMemory();
+        runtime = new RuntimeMemory(vars);
         initializeProgram(program);
-        instructions = states.get(currentLabel);
-        initializeInput(input);
-        currentInstructionPosition = 0;
-        executionCount = 0;
+        initializeVariables(input);
         this.executionHistory = new StringBuilder();
         this.variableHistory = new StringBuilder();
         keepHistory();
@@ -72,31 +61,28 @@ public class LanguageLEnvironment {
     }
 
     public int getExecutionCount() {
-        return executionCount;
+        return runtime.getExecutionCount();
     }
 
     private void initializeProgram(Scanner p) {
-        //initialize states
-        instructionCount = 0;
-        states.put(DEFAULT_UNLABELED_STATE, new ArrayList<>());
-        currentLabel = DEFAULT_UNLABELED_STATE;
+        //initialize instructionMap
+        int instructionCount = 0;
         while (p.hasNextLine()) {
             String line = p.nextLine();
             if (line.isEmpty() || line.contains("//")) continue;
             if (line.contains("[") && line.contains("]")) {
-                String state = line.replace("[", "").replace("]", "");
-                if (instructionCount == 0) currentLabel = state;
-                states.put(state, new ArrayList<>());
+                String label = line.replace("[", "").replace("]", "");
+                runtime.addLabel(label);
             } else {
-                Instructable instruction = factory.getInstruction(line, ++instructionCount);
-                states.get(states.lastKey()).add(instruction);
-                if (instruction.getVarName() != null) vars.put(instruction.getVarName(), 0);
+                Instruction instruction = factory.getInstruction(line, ++instructionCount);
+                runtime.addInstructionToLastLabel(instruction);
+                if(instruction.getWorkingVariable() != null) vars.init(instruction.getWorkingVariable());
             }
         }
         p.close();
     }
 
-    private void initializeInput(String input) {
+    private void initializeVariables(String input) {
         input = input.replace(" ", "");
         String[] inputs = input.split(",");
         for (String s : inputs) {
@@ -108,59 +94,33 @@ public class LanguageLEnvironment {
     }
 
     public boolean hasInstructions() {
-        return instructions != null && currentInstructionPosition < instructions.size();
+        return runtime.hasInstructions();
     }
 
     public void executeNext() {
-
-        if (!hasInstructions()) throw new IllegalStateException("There are no instructions to execute");
-
-        executionCount++;
-        Instructable inst = instructions.get(currentInstructionPosition++);
-        previousInst = inst;
-
-        if (inst.nextState(states, vars) != null) {
-            currentLabel = inst.nextState(states, vars);
-            instructions = inst.executeOn(states, vars);
-            currentInstructionPosition = 0;
-        } else {
-            inst.executeOn(states, vars);
-        }
-
-        checkAndUpdateState();
+        runtime.executeNext();
         keepHistory();
     }
 
-    private void checkAndUpdateState() {
-        if (!hasInstructions()) {
-            int currentLabelIndex = states.indexOf(currentLabel);
-            if (currentLabelIndex != -1 && currentLabelIndex != states.size() - 1) {
-                currentInstructionPosition = 0;
-                currentLabel = states.get(currentLabelIndex + 1);
-                instructions = states.get(currentLabel);
-            }
-        }
-    }
 
     public String getCurrentLabel() {
-        return currentLabel;
+        return runtime.getCurrentLabel();
     }
 
-    public Instructable getNextInstruction() {
-        if (!hasInstructions()) return null;
-        return instructions.get(currentInstructionPosition);
+    public Instruction getNextInstruction() {
+        return runtime.getNextInstruction();
     }
 
-    public Instructable getPrevInstruction() {
-        return previousInst;
+    public Instruction getPrevInstruction() {
+        return runtime.getPrevInstruction();
     }
 
 
     public int getInstructionCount() {
-        return instructionCount;
+        return runtime.getInstructionCount();
     }
 
-    public Map<String, Integer> variables() {
+    public VariableMemory variables() {
         return vars;
     }
 }

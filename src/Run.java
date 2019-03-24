@@ -1,32 +1,32 @@
-import fx.LanguageLEnvironment;
+import language.memory.VariableMemory;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Scanner;
 
 public class Run {
 
     public static void main(String... args) throws FileNotFoundException {
-        File file = new File("YminusZ.txt");
-        Scanner in = new Scanner(file);
-        LanguageLEnvironment env = new LanguageLEnvironment(in, "Y=5,Z=3");
+
+        VariableMemory m = new VariableMemory();
+//        File file = new File("YminusZ.txt");
+//        Scanner in = new Scanner(file);
+//        LanguageLEnvironment env = new LanguageLEnvironment(in, "Y=5,Z=3");
+////        System.out.println(env.variables());
+//        System.out.println("Starting...");
+//
+//        while (env.hasInstructions()) {
+//            System.out.println(env.getExecutionCount());
+//            System.out.println(env.getCurrentLabel());
+//            System.out.println(env.variables());
+//            System.out.println(env.getNextInstruction());
+//            System.out.println();
+//            env.executeNext();
+//        }
+//
+//        System.out.println("\n" +
+//                "\n\nTerminated....");
 //        System.out.println(env.variables());
-        System.out.println("Starting...");
-
-        while (env.hasInstructions()) {
-            System.out.println(env.getExecutionCount());
-            System.out.println(env.getCurrentLabel());
-            System.out.println(env.variables());
-            System.out.println(env.getNextInstruction());
-            System.out.println();
-            env.executeNext();
-        }
-
-        System.out.println("\n" +
-                "\n\nTerminated....");
-        System.out.println(env.variables());
-        System.out.println(env.getCurrentLabel());
-        System.out.println(env.getNextInstruction());
+//        System.out.println(env.getCurrentLabel());
+//        System.out.println(env.getNextInstruction());
 //
 //
 ////        File file = new File("pro.txt");
@@ -47,7 +47,7 @@ public class Run {
 //            }else{
 //                Instructable instruction = factory.getInstruction(line);
 //                states.get(states.lastKey()).add(instruction);
-//                if(instruction.getType() != InstructionType.GOTO_MACRO) vals.put(instruction.getVarName(), 0);
+//                if(instruction.getType() != InstructionType.GOTO) vals.put(instruction.getVarName(), 0);
 //            }
 //        }
 //
@@ -88,7 +88,7 @@ public class Run {
 //                    break;
 //                }
 //
-//                if(inst.nextState(states, vals)){
+//                if(inst.nextLabel(states, vals)){
 //                    instructions = inst.executeOn(states, vals);
 //                    break;
 //                }
