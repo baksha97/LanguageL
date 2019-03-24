@@ -71,7 +71,7 @@ public class Controller implements Initializable {
                 env.executeNext();
             }
             updateInterface();
-        }catch (Exception e){
+        } catch (Exception e) {
             updateInterface();
             e.printStackTrace();
             println(e.getLocalizedMessage());
@@ -90,7 +90,7 @@ public class Controller implements Initializable {
         try {
             int steps = Integer.valueOf(stepByField.getText().trim());
             for (int i = 0; i < steps && env.hasInstructions(); i++) {
-                    env.executeNext();
+                env.executeNext();
             }
             updateInterface();
         } catch (Exception e) {
@@ -103,11 +103,11 @@ public class Controller implements Initializable {
         }
     }
 
-    public void onHistoryOffTick(){
-        if(env == null) return;
-        if(noHistoryCheck.isSelected()){
+    public void onHistoryOffTick() {
+        if (env == null) return;
+        if (noHistoryCheck.isSelected()) {
             env.stopKeepingHistory();
-        }else {
+        } else {
             env.startKeepingHistory();
         }
     }
@@ -137,14 +137,14 @@ public class Controller implements Initializable {
         nextInstructionLabel.setText(env.vm.getNextInstruction());
         snapshotLabel.setText(env.vm.getSnapshot());
         countLabel.setText(env.vm.getExecutionCount());
-        if(!noHistoryCheck.isSelected()){
+        if (!noHistoryCheck.isSelected()) {
             variableHistoryArea.setText(env.getVariableHistory());
             outputArea.setText(env.getExeHistory());
         }
         scrollDown();
     }
 
-    private void scrollDown(){
+    private void scrollDown() {
         variableHistoryArea.positionCaret(variableHistoryArea.getLength());
         outputArea.positionCaret(outputArea.getLength());
     }
@@ -203,7 +203,6 @@ public class Controller implements Initializable {
             Files.write(file, lines, Charset.forName("UTF-8"));
         } catch (IOException e) {
             println(e.getLocalizedMessage());
-            return;
         }
     }
 

@@ -9,7 +9,7 @@ import java.util.List;
 public class InstructionMemory {
     private static final String DEFAULT_UNLABELED_LABEL = "Unlabeled Instruction";
 
-    private LinkedMap<String, List<Instruction>> instructionMap;
+    private final LinkedMap<String, List<Instruction>> instructionMap;
 
     private Instruction previousInst;
     private int currentInstructionPosition;
@@ -17,7 +17,7 @@ public class InstructionMemory {
     private String currentLabel;
     private int executionCount;
     private int instructionCount;
-    private VariableMemory vars;
+    private final VariableMemory vars;
 
 
     public InstructionMemory(VariableMemory vars) {
@@ -29,14 +29,14 @@ public class InstructionMemory {
         setupDefaultLabel();
     }
 
-    private void setupDefaultLabel(){
+    private void setupDefaultLabel() {
         currentLabel = DEFAULT_UNLABELED_LABEL;
         instructionMap.put(DEFAULT_UNLABELED_LABEL, new ArrayList<>());
         instructions = instructionMap.get(DEFAULT_UNLABELED_LABEL);
     }
 
 
-    public void addLabel(String label){
+    public void addLabel(String label) {
         if (!instructionMap.containsKey(label)) instructionMap.put(label, new ArrayList<>());
     }
 
@@ -97,7 +97,7 @@ public class InstructionMemory {
         return previousInst;
     }
 
-    public Instruction getNextInstruction(){
+    public Instruction getNextInstruction() {
         if (!hasInstructions()) return null;
         return instructions.get(currentInstructionPosition);
     }

@@ -2,6 +2,7 @@ package language.parse;
 
 public final class LanguageIndices {
     public static final int VARIABLE = 0;
+
     public final class Operator {
         public static final int VARIABLE_CHECK = 2;
         public static final int OPERATOR = 3;

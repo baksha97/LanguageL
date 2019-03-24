@@ -11,18 +11,19 @@ import java.util.Scanner;
 
 public class LanguageLEnvironment {
 
-    public LanguageLEnvironmentViewModel vm;
-    private InstructionFactory factory;
-    private VariableMemory vars;
-    private InstructionMemory runtime;
+    public final LanguageLEnvironmentViewModel vm;
+    private final InstructionFactory factory;
+    private final VariableMemory vars;
+    private final InstructionMemory runtime;
 
     private boolean keepHistory;
-    private StringBuilder executionHistory;
-    private StringBuilder variableHistory;
+    private final StringBuilder executionHistory;
+    private final StringBuilder variableHistory;
 
     public LanguageLEnvironment(String program, String input) {
         this(new Scanner(program), input);
     }
+
     public LanguageLEnvironment(Scanner program, String input) {
         vm = new LanguageLEnvironmentViewModel(this);
         factory = new InstructionFactory();
@@ -49,9 +50,9 @@ public class LanguageLEnvironment {
             } else {
                 Instruction instruction = factory.getInstruction(line, ++instructionCount);
                 runtime.addInstructionToLastLabel(instruction);
-                if (instruction.getWorkingVariable() != null){
+                if (instruction.getWorkingVariable() != null) {
                     vars.init(instruction.getWorkingVariable());
-                    if(instruction.getType() == InstructionType.COPY){
+                    if (instruction.getType() == InstructionType.COPY) {
                         vars.init(instruction.getCopyVariable());
                     }
                 }
@@ -72,7 +73,7 @@ public class LanguageLEnvironment {
     }
 
     private void keepHistory() {
-        if(!keepHistory) return;
+        if (!keepHistory) return;
         int exCount = getExecutionCount();
         executionHistory.append(vm.getExecutionCount())
                 .append('\n')
@@ -89,11 +90,11 @@ public class LanguageLEnvironment {
         else variableHistory.append("\n").append(vm.getSnapshot());
     }
 
-    public void startKeepingHistory(){
+    public void startKeepingHistory() {
         keepHistory = true;
     }
 
-    public void stopKeepingHistory(){
+    public void stopKeepingHistory() {
         keepHistory = false;
     }
 

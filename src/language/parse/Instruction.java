@@ -9,10 +9,10 @@ import java.util.Map;
 
 public class Instruction {
 
-    private InstructionType type;
-    private int lineNumber;
-    private String line;
-    private String[] parts;
+    private final InstructionType type;
+    private final int lineNumber;
+    private final String line;
+    private final String[] parts;
 
     public Instruction(InstructionType type, int lineNumber, String line) {
         this.type = type;
@@ -21,12 +21,12 @@ public class Instruction {
         this.parts = line.split(" ");
     }
 
-    public List<Instruction> executeOn(Map<String, List<Instruction>> states, VariableMemory vars){
+    public List<Instruction> executeOn(Map<String, List<Instruction>> states, VariableMemory vars) {
         String variable;
         String variableToCopy;
         String newState;
-        switch (this.type){
-            case INCREMENT :
+        switch (this.type) {
+            case INCREMENT:
                 variable = parts[LanguageIndices.VARIABLE];
                 vars.incrementVariable(variable);
                 break;
@@ -37,7 +37,7 @@ public class Instruction {
             case CONDITIONAL:
                 variable = parts[LanguageIndices.Conditional.VARIABLE_TO_CHECK];
                 newState = parts[LanguageIndices.Conditional.POSSIBLE_NEW_STATE];
-                if(vars.variableNotZero(variable)) return states.get(newState);
+                if (vars.variableNotZero(variable)) return states.get(newState);
                 break;
             case GOTO:
                 newState = parts[LanguageIndices.GoTo.NEW_STATE];
@@ -55,24 +55,24 @@ public class Instruction {
         return null;
     }
 
-    public String getWorkingVariable(){
-        if(type == InstructionType.GOTO) return null;
-        if(type == InstructionType.CONDITIONAL) return parts[LanguageIndices.Conditional.VARIABLE_TO_CHECK];
+    public String getWorkingVariable() {
+        if (type == InstructionType.GOTO) return null;
+        if (type == InstructionType.CONDITIONAL) return parts[LanguageIndices.Conditional.VARIABLE_TO_CHECK];
         return parts[LanguageIndices.VARIABLE];
     }
 
-    public String getCopyVariable(){
-        if(type != InstructionType.COPY) return null;
+    public String getCopyVariable() {
+        if (type != InstructionType.COPY) return null;
         return parts[LanguageIndices.Copy.VARIABLE_TO_COPY];
     }
 
-    public String nextLabel(VariableMemory vars){
-        if(type == InstructionType.GOTO){
+    public String nextLabel(VariableMemory vars) {
+        if (type == InstructionType.GOTO) {
             return parts[LanguageIndices.GoTo.NEW_STATE];
-        }else if(type == InstructionType.CONDITIONAL){
+        } else if (type == InstructionType.CONDITIONAL) {
             String variable = parts[LanguageIndices.Conditional.VARIABLE_TO_CHECK];
             String newState = parts[LanguageIndices.Conditional.POSSIBLE_NEW_STATE];
-            if(vars.variableNotZero(variable)){
+            if (vars.variableNotZero(variable)) {
                 return newState;
             }
         }

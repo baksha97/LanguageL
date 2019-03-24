@@ -20,7 +20,7 @@ public class InstructionFactory {
             else if (parts[2].equals(possibleVarName) && parts[3].equals("-") && parts[4].equals("1"))
                 return new Instruction(InstructionType.DECREMENT, lineNumber, line);
             throw new IllegalArgumentException();
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new IllegalArgumentException("Cannot create Instruction with: " + Arrays.toString(parts) + " at " + lineNumber);
         }
     }

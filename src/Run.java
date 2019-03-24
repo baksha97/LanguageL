@@ -4,7 +4,7 @@ import java.io.FileNotFoundException;
 
 public class Run {
 
-    public static void main(String... args) throws FileNotFoundException {
+    public static void main(String... args) {
 
         VariableMemory m = new VariableMemory();
 //        File file = new File("YminusZ.txt");
