@@ -43,7 +43,7 @@ public class VariableMemory {
         return get(var) != 0;
     }
 
-    private int get(String var) {
+    public int get(String var) {
         return vars.getOrDefault(var, 0);
     }
 

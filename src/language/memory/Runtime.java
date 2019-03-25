@@ -87,12 +87,17 @@ public class Runtime {
             case COPY:
                 vars.replaceWith(instruction.getWorkingVariable(), instruction.getCopyVariable());
                 break;
-        }
-
-        if (instruction.canChangeLabel() && instruction.nextLabel(vars) != null) {
-            currentLabel = instruction.nextLabel(vars);
-            currentInstructionPosition = 0;
-            instructions = instructionMap.get(instruction.nextLabel(vars));
+            case GOTO:
+                // || fallthrough
+            case CONDITIONAL:
+                if (instruction.nextLabel(vars) != null) {
+                    currentLabel = instruction.nextLabel(vars);
+                    currentInstructionPosition = 0;
+                    instructions = instructionMap.get(instruction.nextLabel(vars));
+                }
+                break;
+            default:
+                throw new IllegalStateException("Instruction not executable: " + instruction);
         }
 
         verifyInstructionPosition();
