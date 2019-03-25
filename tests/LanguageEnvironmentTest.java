@@ -12,6 +12,7 @@ public class LanguageEnvironmentTest {
         env.stopKeepingHistory();
         while(env.hasInstructions()) env.executeNext();
         Assert.assertEquals(33, env.variables().get("Y"));
+        Assert.assertNull(env.getNextInstruction());
     }
 
     @Test
@@ -21,6 +22,7 @@ public class LanguageEnvironmentTest {
         env.stopKeepingHistory();
         while(env.hasInstructions()) env.executeNext();
         Assert.assertEquals(15, env.variables().get("Y"));
+        Assert.assertNull(env.getNextInstruction());
     }
 
     @Test
@@ -29,6 +31,7 @@ public class LanguageEnvironmentTest {
         LanguageLEnvironment env = new LanguageLEnvironment(x1Cubed_Threex2(), input);
         while(env.hasInstructions()) env.executeNext();
         Assert.assertEquals(64, env.variables().get("Y"));
+        Assert.assertNull(env.getNextInstruction());
     }
 
     @Test
@@ -38,6 +41,7 @@ public class LanguageEnvironmentTest {
         env.stopKeepingHistory();
         while(env.hasInstructions()) env.executeNext();
         Assert.assertEquals(0, env.variables().get("Y"));
+        Assert.assertNull(env.getNextInstruction());
     }
 
     @Test
@@ -47,6 +51,7 @@ public class LanguageEnvironmentTest {
         env.stopKeepingHistory();
         while(env.hasInstructions()) env.executeNext();
         Assert.assertEquals(1, env.variables().get("Y"));
+        Assert.assertNull(env.getNextInstruction());
     }
 
     @Test
@@ -56,6 +61,7 @@ public class LanguageEnvironmentTest {
         env.stopKeepingHistory();
         while(env.hasInstructions()) env.executeNext();
         Assert.assertEquals(1, env.variables().get("Y"));
+        Assert.assertNull(env.getNextInstruction());
     }
 
     @Test
@@ -65,6 +71,7 @@ public class LanguageEnvironmentTest {
         env.stopKeepingHistory();
         while(env.hasInstructions()) env.executeNext();
         Assert.assertEquals(1024, env.variables().get("Y"));
+        Assert.assertNull(env.getNextInstruction());
     }
 
     @Test
@@ -74,6 +81,8 @@ public class LanguageEnvironmentTest {
         env.stopKeepingHistory();
         while(env.hasInstructions()) env.executeNext();
         Assert.assertEquals(1000, env.variables().get("Y"));
+        Assert.assertEquals("E", env.getCurrentLabel());
+        Assert.assertNull(env.getNextInstruction());
     }
 
     @Test
@@ -83,6 +92,8 @@ public class LanguageEnvironmentTest {
         env.stopKeepingHistory();
         while(env.hasInstructions()) env.executeNext();
         Assert.assertEquals(0, env.variables().get("Y"));
+        Assert.assertEquals("E", env.getCurrentLabel());
+        Assert.assertNull(env.getNextInstruction());
     }
 
     @Test
@@ -92,6 +103,8 @@ public class LanguageEnvironmentTest {
         env.stopKeepingHistory();
         while(env.hasInstructions()) env.executeNext();
         Assert.assertEquals(1, env.variables().get("Y"));
+        Assert.assertEquals("E", env.getCurrentLabel());
+        Assert.assertNull(env.getNextInstruction());
     }
 
     private String xCubed(){
