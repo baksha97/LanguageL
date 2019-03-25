@@ -258,8 +258,13 @@ GOTO D
 #### Program: (X1)^(X2) (with Macros)
 
 ```
-IF X2 != 0 GOTO A
+IF X2 != 0 GOTO D
 Y <- Y + 1
+GOTO E
+
+[D]
+IF X1 != 0 GOTO A
+Y <- 0
 GOTO E
 
 [A]
