@@ -1,7 +1,6 @@
 package language.memory;
 
 import language.parse.Instruction;
-import language.parse.InstructionType;
 import org.apache.commons.collections4.map.LinkedMap;
 
 import java.util.ArrayList;
@@ -72,30 +71,28 @@ public class Runtime {
     public void executeNext() {
         if (!hasInstructions()) throw new IllegalStateException("There are no instructions to execute");
         executionCount++;
-        Instruction inst = instructions.get(currentInstructionPosition++);
-        previousInst = inst;
+        Instruction instruction = instructions.get(currentInstructionPosition++);
+        previousInst = instruction;
 
-        switch (inst.getType()) {
+        switch (instruction.getType()) {
             case INCREMENT:
-                vars.incrementVariable(inst.getWorkingVariable());
+                vars.incrementVariable(instruction.getWorkingVariable());
                 break;
             case DECREMENT:
-                vars.decrementVariable(inst.getWorkingVariable());
+                vars.decrementVariable(instruction.getWorkingVariable());
                 break;
             case ZERO:
-                vars.reset(inst.getWorkingVariable());
+                vars.reset(instruction.getWorkingVariable());
                 break;
             case COPY:
-                vars.replaceWith(inst.getWorkingVariable(), inst.getCopyVariable());
+                vars.replaceWith(instruction.getWorkingVariable(), instruction.getCopyVariable());
                 break;
         }
 
-        boolean canChangeLabel = inst.getType() == InstructionType.GOTO || inst.getType() == InstructionType.CONDITIONAL;
-
-        if (canChangeLabel && inst.nextLabel(vars) != null) {
-            currentLabel = inst.nextLabel(vars);
+        if (instruction.canChangeLabel() && instruction.nextLabel(vars) != null) {
+            currentLabel = instruction.nextLabel(vars);
             currentInstructionPosition = 0;
-            instructions = instructionMap.get(inst.nextLabel(vars));
+            instructions = instructionMap.get(instruction.nextLabel(vars));
         }
 
         verifyInstructionPosition();

@@ -21,6 +21,10 @@ public class Instruction {
         this.statement = line.split(" ");
     }
 
+    public boolean canChangeLabel(){
+        return getType() == InstructionType.GOTO || getType() == InstructionType.CONDITIONAL;
+    }
+
     public String getWorkingVariable() {
         if (type == InstructionType.GOTO) return null;
         if (type == InstructionType.CONDITIONAL) return statement[LanguageIndices.Conditional.VARIABLE_TO_CHECK];
