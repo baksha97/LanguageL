@@ -21,28 +21,6 @@ public class Instruction {
         this.statement = line.split(" ");
     }
 
-    public List<Instruction> executeOn(Map<String, List<Instruction>> labelMap, VariableMemory vars) {
-        switch (this.type) {
-            case INCREMENT:
-                vars.incrementVariable(getWorkingVariable());
-                break;
-            case DECREMENT:
-                vars.decrementVariable(getWorkingVariable());
-                break;
-            case ZERO:
-                vars.reset(getWorkingVariable());
-                break;
-            case COPY:
-                vars.replaceWith(getWorkingVariable(), getCopyVariable());
-                break;
-            case CONDITIONAL:
-                return labelMap.get(nextLabel(vars));
-            case GOTO:
-                return labelMap.get(nextLabel(vars));
-        }
-        return null;
-    }
-
     public String getWorkingVariable() {
         if (type == InstructionType.GOTO) return null;
         if (type == InstructionType.CONDITIONAL) return statement[LanguageIndices.Conditional.VARIABLE_TO_CHECK];

@@ -1,6 +1,7 @@
 package language.memory;
 
 import language.parse.Instruction;
+import language.parse.InstructionType;
 import org.apache.commons.collections4.map.LinkedMap;
 
 import java.util.ArrayList;
@@ -74,12 +75,27 @@ public class Runtime {
         Instruction inst = instructions.get(currentInstructionPosition++);
         previousInst = inst;
 
-        if (inst.nextLabel(vars) != null) {
+        switch (inst.getType()) {
+            case INCREMENT:
+                vars.incrementVariable(inst.getWorkingVariable());
+                break;
+            case DECREMENT:
+                vars.decrementVariable(inst.getWorkingVariable());
+                break;
+            case ZERO:
+                vars.reset(inst.getWorkingVariable());
+                break;
+            case COPY:
+                vars.replaceWith(inst.getWorkingVariable(), inst.getCopyVariable());
+                break;
+        }
+
+        boolean canChangeLabel = inst.getType() == InstructionType.GOTO || inst.getType() == InstructionType.CONDITIONAL;
+
+        if (canChangeLabel && inst.nextLabel(vars) != null) {
             currentLabel = inst.nextLabel(vars);
-            instructions = inst.executeOn(instructionMap, vars);
             currentInstructionPosition = 0;
-        } else {
-            inst.executeOn(instructionMap, vars);
+            instructions = instructionMap.get(inst.nextLabel(vars));
         }
 
         verifyInstructionPosition();
