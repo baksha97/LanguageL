@@ -160,10 +160,9 @@ IF Z4 != 0 GOTO A
 
 #### Program: X^3 (with Macros / Professor's)
 
-`X1=3, X2=0`
+`X1=3`
 ```
 Z1 <- X1
-Z2 <- X2
 Z4 <- Z4 + 1
 
 [C]
@@ -218,37 +217,45 @@ IF Z4 != 0 GOTO A
 
 `X1=10, X2=3`
 ```
+IF X1 != 0 GOTO A2
+Y <- Y
+GOTO D
+[A2]
 Z4 <- Z4 + 1
 Z4 <- Z4 + 1
 Z4 <- Z4 + 1
-
+Y <- Y
 [A]
 Z1 <- X1
 Z2 <- Y
 Y <- 0
-
+Y <- Y
 [B]
 Z1 <- Z1 - 1
 Z3 <- Z2
-
+Y <- Y
 [C]
 Y <- Y + 1
 Z3 <- Z3 - 1
 IF Z3 != 0 GOTO C
+Y <- Y
 IF Z1 != 0 GOTO B
 Z4 <- Z4 - 1
 IF Z4 != 0 GOTO A
-
+Y <- Y
 [D]
 IF X2 != 0 GOTO D2
+Y <- Y
 GOTO E
-
+Y <- Y
 [D2]
 X2 <- X2 - 1
 Y <- Y + 1
 Y <- Y + 1
 Y <- Y + 1
+Y <- Y
 GOTO D
+
 ```
 
 #### Program: (X1)^(X2) (with Macros)
