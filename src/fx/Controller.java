@@ -50,23 +50,21 @@ public class Controller implements Initializable {
 
     //Execution Buttons
     public void onSetClick() {
-
         outputArea.setText("");
         variableHistoryArea.setText("");
-        saveEditor();
         if (!setupEnv()) return;
         onHistoryOffTick();
         updateInterface();
     }
 
     public void onRunClick() {
-        saveEditor();
 
         if (env == null || needsReset) {
             println("Setup first.");
             return;
         }
         try {
+            saveEditor();
             while (env.hasInstructions()) {
                 env.executeNext();
             }
@@ -81,13 +79,13 @@ public class Controller implements Initializable {
     }
 
     public void onStepClick() {
-        saveEditor();
         if (env == null || needsReset) {
             println("Setup first.");
             return;
         }
 
         try {
+            saveEditor();
             int steps = Integer.valueOf(stepByField.getText().trim());
             for (int i = 0; i < steps && env.hasInstructions(); i++) {
                 env.executeNext();
@@ -115,6 +113,7 @@ public class Controller implements Initializable {
 
     private boolean setupEnv() {
         try {
+            saveEditor();
             env = new LanguageLEnvironment(programArea.getText().trim(), inputField.getText().trim());
             needsReset = false;
         } catch (Exception e) {
@@ -159,7 +158,12 @@ public class Controller implements Initializable {
     public void onSaveAsClick() {
         File file = fileChooser.showSaveDialog(null);
         if (file == null) return;
-        save_file(file.getAbsolutePath());
+        try {
+            save_file(file.getAbsolutePath());
+        } catch (IOException e) {
+            println(e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public void onAboutClick() {
@@ -186,11 +190,11 @@ public class Controller implements Initializable {
     }
 
     //File editor management
-    private void saveEditor() {
+    private void saveEditor() throws IOException {
         save_file(DEFAULT_PROGRAM_NAME);
     }
 
-    private void save_file(String location) {
+    private void save_file(String location) throws IOException {
         List<String> lines = new ArrayList<>();
         Scanner prg = new Scanner(programArea.getText());
         while (prg.hasNextLine()) {
@@ -199,11 +203,7 @@ public class Controller implements Initializable {
         }
 
         Path file = Paths.get(location);
-        try {
-            Files.write(file, lines, Charset.forName("UTF-8"));
-        } catch (IOException e) {
-            println(e.getLocalizedMessage());
-        }
+        Files.write(file, lines, Charset.forName("UTF-8"));
     }
 
     private void load_file(String fileLocation) {

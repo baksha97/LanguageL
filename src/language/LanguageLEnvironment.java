@@ -1,10 +1,9 @@
 package language;
 
-import language.memory.InstructionMemory;
+import language.memory.Runtime;
 import language.memory.VariableMemory;
 import language.parse.Instruction;
 import language.parse.InstructionFactory;
-import language.parse.InstructionType;
 
 import java.util.Scanner;
 
@@ -13,12 +12,10 @@ public class LanguageLEnvironment {
 
     public final LanguageLEnvironmentViewModel vm;
     private final InstructionFactory factory;
-    private final VariableMemory vars;
-    private final InstructionMemory runtime;
-
-    private boolean keepHistory;
+    private final Runtime runtime;
     private final StringBuilder executionHistory;
     private final StringBuilder variableHistory;
+    private boolean keepHistory;
 
     public LanguageLEnvironment(String program, String input) {
         this(new Scanner(program), input);
@@ -27,13 +24,12 @@ public class LanguageLEnvironment {
     public LanguageLEnvironment(Scanner program, String input) {
         vm = new LanguageLEnvironmentViewModel(this);
         factory = new InstructionFactory();
-        vars = new VariableMemory();
-        runtime = new InstructionMemory(vars);
+        runtime = new Runtime();
         keepHistory = true;
-        initializeProgram(program);
+        executionHistory = new StringBuilder();
+        variableHistory = new StringBuilder();
         initializeVariables(input);
-        this.executionHistory = new StringBuilder();
-        this.variableHistory = new StringBuilder();
+        initializeProgram(program);
         keepHistory();
     }
 
@@ -41,7 +37,7 @@ public class LanguageLEnvironment {
         //initialize instructionMap
         int instructionCount = 0;
         while (p.hasNextLine()) {
-            String line = p.nextLine();
+            String line = p.nextLine().trim();
             if (line.isEmpty() || line.contains("//")) continue;
 
             if (line.contains("[") && line.contains("]")) {
@@ -50,12 +46,6 @@ public class LanguageLEnvironment {
             } else {
                 Instruction instruction = factory.getInstruction(line, ++instructionCount);
                 runtime.addInstructionToLastLabel(instruction);
-                if (instruction.getWorkingVariable() != null) {
-                    vars.init(instruction.getWorkingVariable());
-                    if (instruction.getType() == InstructionType.COPY) {
-                        vars.init(instruction.getCopyVariable());
-                    }
-                }
             }
         }
         p.close();
@@ -67,8 +57,8 @@ public class LanguageLEnvironment {
         for (String s : inputs) {
             String[] kv = s.split("=");
             int val = Integer.parseInt(kv[1]);
-            if (val < 0) throw new IllegalStateException("Variables cannot be negative. " + kv[0]);
-            vars.put(kv[0], val);
+            if (val < 0) throw new IllegalArgumentException("Variables cannot be negative. " + kv[0]);
+            runtime.setInputVariable(kv[0], val);
         }
     }
 
@@ -107,7 +97,6 @@ public class LanguageLEnvironment {
         keepHistory();
     }
 
-
     public String getCurrentLabel() {
         return runtime.getCurrentLabel();
     }
@@ -137,6 +126,11 @@ public class LanguageLEnvironment {
     }
 
     public VariableMemory variables() {
-        return vars;
+        return runtime.variables();
+    }
+
+    @Override
+    public String toString() {
+        return runtime.toString();
     }
 }

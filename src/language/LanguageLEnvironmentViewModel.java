@@ -33,7 +33,7 @@ public class LanguageLEnvironmentViewModel {
 
     public String getI() {
         if (env.getNextInstruction() == null) return "i: " + (env.getInstructionCount() + 1);
-        return "i: " + (env.getNextInstruction().getLineNumber());
+        return "i: " + (env.getNextInstruction().getInstructionNumber());
     }
 
     public String getExecutionCount() {

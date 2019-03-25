@@ -12,36 +12,39 @@ public class VariableMemory {
         vars = new TreeMap<>(new VariableComparator());
     }
 
-    public void init(String var) {
-        if (!vars.containsKey(var)) put(var, 0);
-    }
-
     public void put(String var, int val) {
+        if (val < 0) throw new IllegalArgumentException("You cannot put negative variables into the state.");
         vars.put(var, val);
     }
 
+    public void initIfAbsent(String var) {
+        if (!vars.containsKey(var)) put(var, 0);
+    }
+
     public void incrementVariable(String var) {
-        int value = vars.getOrDefault(var, 0) + 1;
-        vars.put(var, value);
+        put(var, get(var) + 1);
     }
 
     public void decrementVariable(String var) {
-        int value = vars.getOrDefault(var, 0) - 1;
-        if (value < 0) return;
-        vars.put(var, value);
+        if (get(var) <= 0) return;
+        int value = get(var) - 1;
+        put(var, value);
     }
 
-    public void copyVariableValue(String to, String from) {
-        int value = vars.getOrDefault(from, 0);
-        vars.put(to, value);
+    public void replaceWith(String to, String from) {
+        put(to, get(from));
     }
 
-    public void resetVariable(String var) {
+    public void reset(String var) {
         put(var, 0);
     }
 
-    public boolean variableNotZero(String var) {
-        return vars.getOrDefault(var, 0) != 0;
+    public boolean isNotZero(String var) {
+        return get(var) != 0;
+    }
+
+    private int get(String var) {
+        return vars.getOrDefault(var, 0);
     }
 
     @Override

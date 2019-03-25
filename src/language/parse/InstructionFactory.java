@@ -12,7 +12,7 @@ public class InstructionFactory {
                 return new Instruction(InstructionType.CONDITIONAL, lineNumber, line);
             else if (parts[0].equalsIgnoreCase("GoTo"))
                 return new Instruction(InstructionType.GOTO, lineNumber, line);
-            else if (parts[2].equals("0")) return new Instruction(InstructionType.SET_ZERO, lineNumber, line);
+            else if (parts[2].equals("0")) return new Instruction(InstructionType.ZERO, lineNumber, line);
             else if (parts.length == 3)
                 return new Instruction(InstructionType.COPY, lineNumber, line);
             else if (parts[2].equals(possibleVarName) && parts[3].equals("+") && parts[4].equals("1"))

@@ -10,73 +10,62 @@ import java.util.Map;
 public class Instruction {
 
     private final InstructionType type;
-    private final int lineNumber;
+    private final int instructionNumber;
     private final String line;
-    private final String[] parts;
+    private final String[] statement;
 
-    public Instruction(InstructionType type, int lineNumber, String line) {
+    public Instruction(InstructionType type, int instructionNumber, String line) {
         this.type = type;
-        this.lineNumber = lineNumber;
+        this.instructionNumber = instructionNumber;
         this.line = line;
-        this.parts = line.split(" ");
+        this.statement = line.split(" ");
     }
 
-    public List<Instruction> executeOn(Map<String, List<Instruction>> states, VariableMemory vars) {
-        String variable;
-        String variableToCopy;
-        String newState;
+    public List<Instruction> executeOn(Map<String, List<Instruction>> labelMap, VariableMemory vars) {
         switch (this.type) {
             case INCREMENT:
-                variable = parts[LanguageIndices.VARIABLE];
-                vars.incrementVariable(variable);
+                vars.incrementVariable(getWorkingVariable());
                 break;
             case DECREMENT:
-                variable = parts[LanguageIndices.VARIABLE];
-                vars.decrementVariable(variable);
+                vars.decrementVariable(getWorkingVariable());
                 break;
-            case CONDITIONAL:
-                variable = parts[LanguageIndices.Conditional.VARIABLE_TO_CHECK];
-                newState = parts[LanguageIndices.Conditional.POSSIBLE_NEW_STATE];
-                if (vars.variableNotZero(variable)) return states.get(newState);
-                break;
-            case GOTO:
-                newState = parts[LanguageIndices.GoTo.NEW_STATE];
-                return states.get(newState);
-            case SET_ZERO:
-                variable = parts[LanguageIndices.VARIABLE];
-                vars.resetVariable(variable);
+            case ZERO:
+                vars.reset(getWorkingVariable());
                 break;
             case COPY:
-                variable = parts[LanguageIndices.VARIABLE];
-                variableToCopy = parts[LanguageIndices.Copy.VARIABLE_TO_COPY];
-                vars.copyVariableValue(variable, variableToCopy);
+                vars.replaceWith(getWorkingVariable(), getCopyVariable());
                 break;
+            case CONDITIONAL:
+                return labelMap.get(nextLabel(vars));
+            case GOTO:
+                return labelMap.get(nextLabel(vars));
         }
         return null;
     }
 
     public String getWorkingVariable() {
         if (type == InstructionType.GOTO) return null;
-        if (type == InstructionType.CONDITIONAL) return parts[LanguageIndices.Conditional.VARIABLE_TO_CHECK];
-        return parts[LanguageIndices.VARIABLE];
+        if (type == InstructionType.CONDITIONAL) return statement[LanguageIndices.Conditional.VARIABLE_TO_CHECK];
+        return statement[LanguageIndices.VARIABLE];
     }
 
     public String getCopyVariable() {
         if (type != InstructionType.COPY) return null;
-        return parts[LanguageIndices.Copy.VARIABLE_TO_COPY];
+        return statement[LanguageIndices.Copy.VARIABLE_TO_COPY];
+    }
+
+    private String conditionalLabel() {
+        if (type == InstructionType.CONDITIONAL)
+            return statement[LanguageIndices.Conditional.POSSIBLE_NEW_LABEL];
+        return null;
     }
 
     public String nextLabel(VariableMemory vars) {
         if (type == InstructionType.GOTO) {
-            return parts[LanguageIndices.GoTo.NEW_STATE];
-        } else if (type == InstructionType.CONDITIONAL) {
-            String variable = parts[LanguageIndices.Conditional.VARIABLE_TO_CHECK];
-            String newState = parts[LanguageIndices.Conditional.POSSIBLE_NEW_STATE];
-            if (vars.variableNotZero(variable)) {
-                return newState;
-            }
+            return statement[LanguageIndices.GoTo.NEW_LABEL];
+        } else if (type == InstructionType.CONDITIONAL && vars.isNotZero(getWorkingVariable())) {
+            return conditionalLabel();
         }
-
         return null;
     }
 
@@ -84,8 +73,8 @@ public class Instruction {
         return type;
     }
 
-    public int getLineNumber() {
-        return lineNumber;
+    public int getInstructionNumber() {
+        return instructionNumber;
     }
 
     public String getLine() {
@@ -94,6 +83,6 @@ public class Instruction {
 
     @Override
     public String toString() {
-        return Arrays.toString(parts);
+        return Arrays.toString(statement);
     }
 }

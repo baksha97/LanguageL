@@ -6,27 +6,39 @@ import org.apache.commons.collections4.map.LinkedMap;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InstructionMemory {
+public class Runtime {
     private static final String DEFAULT_UNLABELED_LABEL = "Unlabeled Instruction";
 
     private final LinkedMap<String, List<Instruction>> instructionMap;
-
+    private final VariableMemory vars;
     private Instruction previousInst;
     private int currentInstructionPosition;
     private List<Instruction> instructions;
     private String currentLabel;
     private int executionCount;
     private int instructionCount;
-    private final VariableMemory vars;
 
 
-    public InstructionMemory(VariableMemory vars) {
-        this.vars = vars;
+    public Runtime() {
+        this.vars = new VariableMemory();
         instructionMap = new LinkedMap<>();
         currentInstructionPosition = 0;
         executionCount = 0;
         instructionCount = 0;
         setupDefaultLabel();
+    }
+
+    public void setInputVariable(String var, int value) {
+        vars.put(var, value);
+    }
+
+    private void initVariablesFromInstruction(Instruction instruction) {
+        if (instruction.getWorkingVariable() != null) {
+            vars.initIfAbsent(instruction.getWorkingVariable());
+        }
+        if (instruction.getCopyVariable() != null) {
+            vars.initIfAbsent(instruction.getCopyVariable());
+        }
     }
 
     private void setupDefaultLabel() {
@@ -35,18 +47,17 @@ public class InstructionMemory {
         instructions = instructionMap.get(DEFAULT_UNLABELED_LABEL);
     }
 
-
     public void addLabel(String label) {
         if (!instructionMap.containsKey(label)) instructionMap.put(label, new ArrayList<>());
     }
 
-
+    //I am implementing it this way although not publicly used to allow input such as "[A]: GOTO B" in the future.
     public void addInstruction(String label, Instruction inst) {
         addLabel(label);
-        verifyInstructionPosition();
+        initVariablesFromInstruction(inst);
         instructionMap.get(label).add(inst);
         instructionCount++;
-
+        verifyInstructionPosition();
     }
 
     public void addInstructionToLastLabel(Instruction inst) {
@@ -75,7 +86,8 @@ public class InstructionMemory {
     }
 
     private void verifyInstructionPosition() {
-        if (!hasInstructions()) {
+        boolean hasInstruction = instructions != null && currentInstructionPosition < instructions.size();
+        if (!hasInstruction) {
             int currentLabelIndex = instructionMap.indexOf(currentLabel);
             if (currentLabelIndex != -1 && currentLabelIndex != instructionMap.size() - 1) {
                 currentInstructionPosition = 0;
@@ -110,5 +122,8 @@ public class InstructionMemory {
         return vars;
     }
 
-
+    @Override
+    public String toString() {
+        return vars.toString();
+    }
 }

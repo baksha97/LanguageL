@@ -11,7 +11,7 @@ public final class LanguageIndices {
 
     public final class Conditional {
         public static final int VARIABLE_TO_CHECK = 1;
-        public static final int POSSIBLE_NEW_STATE = 5;
+        public static final int POSSIBLE_NEW_LABEL = 5;
     }
 
     public final class Copy {
@@ -19,6 +19,6 @@ public final class LanguageIndices {
     }
 
     public final class GoTo {
-        public static final int NEW_STATE = 1;
+        public static final int NEW_LABEL = 1;
     }
 }

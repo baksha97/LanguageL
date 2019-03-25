@@ -15,7 +15,7 @@
         </Menu>
     </MenuBar>
     <HBox alignment="CENTER" prefHeight="462.0" prefWidth="1073.0" VBox.vgrow="ALWAYS">
-        <VBox maxWidth="220.0" HBox.hgrow="ALWAYS">
+        <VBox maxWidth="226.0" minWidth="-Infinity" prefHeight="785.0" prefWidth="226.0" HBox.hgrow="NEVER">
             <TextField fx:id="inputField" prefHeight="25.0" prefWidth="291.0" promptText="Enter input: ex  X1=2,X2=16"/>
             <TextArea fx:id="programArea" prefHeight="437.0" prefWidth="200.0"
                       promptText="Write code. Comments and blank new lines allowed." VBox.vgrow="ALWAYS">
@@ -43,8 +43,8 @@
                     </Label>
                     <CheckBox fx:id="noHistoryCheck" alignment="BOTTOM_LEFT" layoutX="807.0" layoutY="48.0"
                               mnemonicParsing="false" onAction="#onHistoryOffTick" prefHeight="17.0" prefWidth="173.0"
-                              text="Big Calculation (no history)" textFill="WHITE" AnchorPane.bottomAnchor="10.0"
-                              AnchorPane.rightAnchor="14.0"/>
+                              text="Big Calculation (no history)" textFill="WHITE" AnchorPane.bottomAnchor="8.0"
+                              AnchorPane.rightAnchor="8.0"/>
                 </children>
             </AnchorPane>
             <AnchorPane layoutY="72.0" prefHeight="518.0" prefWidth="1006.0" style="-fx-background-color: #FAFAFA;"
