@@ -22,7 +22,7 @@ public class LanguageEnvironmentTest {
         String input = "X1=4, X2=0";
         makeTest(input, x1Cubed_Threex2(), 64);
     }
-
+//
     @Test
     public void x1_ToPower_x2_test1() {
         String input = "X1=0, X2=8";
