@@ -48,6 +48,12 @@ public class LanguageEnvironmentTest {
     }
 
     @Test
+    public void x1_ToPower_x2_test5() {
+        String input = "X1=2, X2=20";
+        makeTest(input, x1_ToPower_x2(), 1048576);
+    }
+
+    @Test
     public void xCubed_test1() {
         String input = "X1=10";
         makeTest(input, xCubed(), 1000);
