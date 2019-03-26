@@ -6,103 +6,70 @@ import org.junit.Test;
 public class LanguageEnvironmentTest {
 
     @Test
-    public void x1CubedThreex2_test1() {
+    public void x1Cubed_3x2_test1() {
         String input = "X1=3, X2=2";
-        LanguageLEnvironment env = new LanguageLEnvironment(x1Cubed_Threex2(), input);
-        env.stopKeepingHistory();
-        while(env.hasInstructions()) env.executeNext();
-        Assert.assertEquals(33, env.variables().get("Y"));
-        Assert.assertNull(env.getNextInstruction());
+        makeTest(input, x1Cubed_Threex2(), 33);
     }
 
     @Test
-    public void x1CubedThreex2_test2() {
+    public void x1Cubed_3x2_test2() {
         String input = "X1=0, X2=5";
-        LanguageLEnvironment env = new LanguageLEnvironment(x1Cubed_Threex2(), input);
-        env.stopKeepingHistory();
-        while(env.hasInstructions()) env.executeNext();
-        Assert.assertEquals(15, env.variables().get("Y"));
-        Assert.assertNull(env.getNextInstruction());
+        makeTest(input, x1Cubed_Threex2(), 15);
     }
 
     @Test
-    public void x1CubedThreex2_test3() {
+    public void x1Cubed_3x2_test3() {
         String input = "X1=4, X2=0";
-        LanguageLEnvironment env = new LanguageLEnvironment(x1Cubed_Threex2(), input);
-        while(env.hasInstructions()) env.executeNext();
-        Assert.assertEquals(64, env.variables().get("Y"));
-        Assert.assertNull(env.getNextInstruction());
+        makeTest(input, x1Cubed_Threex2(), 64);
     }
 
     @Test
     public void x1_ToPower_x2_test1() {
         String input = "X1=0, X2=8";
-        LanguageLEnvironment env = new LanguageLEnvironment(x1_ToPower_x2(), input);
-        env.stopKeepingHistory();
-        while(env.hasInstructions()) env.executeNext();
-        Assert.assertEquals(0, env.variables().get("Y"));
-        Assert.assertNull(env.getNextInstruction());
+        makeTest(input, x1_ToPower_x2(), 0);
     }
 
     @Test
     public void x1_ToPower_x2_test2() {
         String input = "X1=0, X2=0";
-        LanguageLEnvironment env = new LanguageLEnvironment(x1_ToPower_x2(), input);
-        env.stopKeepingHistory();
-        while(env.hasInstructions()) env.executeNext();
-        Assert.assertEquals(1, env.variables().get("Y"));
-        Assert.assertNull(env.getNextInstruction());
+        makeTest(input, x1_ToPower_x2(), 1);
     }
 
     @Test
     public void x1_ToPower_x2_test3() {
         String input = "X1=1, X2=5";
-        LanguageLEnvironment env = new LanguageLEnvironment(x1_ToPower_x2(), input);
-        env.stopKeepingHistory();
-        while(env.hasInstructions()) env.executeNext();
-        Assert.assertEquals(1, env.variables().get("Y"));
-        Assert.assertNull(env.getNextInstruction());
+        makeTest(input, x1_ToPower_x2(), 1);
     }
 
     @Test
     public void x1_ToPower_x2_test4() {
         String input = "X1=2, X2=10";
-        LanguageLEnvironment env = new LanguageLEnvironment(x1_ToPower_x2(), input);
-        env.stopKeepingHistory();
-        while(env.hasInstructions()) env.executeNext();
-        Assert.assertEquals(1024, env.variables().get("Y"));
-        Assert.assertNull(env.getNextInstruction());
+        makeTest(input, x1_ToPower_x2(), 1024);
     }
 
     @Test
     public void xCubed_test1() {
         String input = "X1=10";
-        LanguageLEnvironment env = new LanguageLEnvironment(xCubed(), input);
-        env.stopKeepingHistory();
-        while(env.hasInstructions()) env.executeNext();
-        Assert.assertEquals(1000, env.variables().get("Y"));
-        Assert.assertEquals("E", env.getCurrentLabel());
-        Assert.assertNull(env.getNextInstruction());
+        makeTest(input, xCubed(), 1000);
     }
 
     @Test
     public void xCubed_test2() {
         String input = "X1=0";
-        LanguageLEnvironment env = new LanguageLEnvironment(xCubed(), input);
-        env.stopKeepingHistory();
-        while(env.hasInstructions()) env.executeNext();
-        Assert.assertEquals(0, env.variables().get("Y"));
-        Assert.assertEquals("E", env.getCurrentLabel());
-        Assert.assertNull(env.getNextInstruction());
+        makeTest(input, xCubed(), 0);
     }
 
     @Test
     public void xCubed_test3() {
         String input = "X1=1";
-        LanguageLEnvironment env = new LanguageLEnvironment(xCubed(), input);
+        makeTest(input, xCubed(), 1);
+    }
+
+    private void makeTest(String input, String program, int expectedY){
+        LanguageLEnvironment env = new LanguageLEnvironment(program, input);
         env.stopKeepingHistory();
         while(env.hasInstructions()) env.executeNext();
-        Assert.assertEquals(1, env.variables().get("Y"));
+        Assert.assertEquals(expectedY, env.variables().get("Y"));
         Assert.assertEquals("E", env.getCurrentLabel());
         Assert.assertNull(env.getNextInstruction());
     }
@@ -200,7 +167,8 @@ public class LanguageEnvironmentTest {
                 "IF Z3 != 0 GOTO C\n" +
                 "IF Z1 != 0 GOTO B\n" +
                 "X2 <- X2 - 1\n" +
-                "IF X2 != 0 GOTO A";
+                "IF X2 != 0 GOTO A\n" +
+                "GOTO E";
         return program;
     }
 }
