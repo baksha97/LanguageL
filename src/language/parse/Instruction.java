@@ -3,9 +3,6 @@ package language.parse;
 import language.memory.VariableMemory;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
 
 public class Instruction {
 

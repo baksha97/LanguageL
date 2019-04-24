@@ -6,6 +6,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import language.LanguageLEnvironment;
+import language.parse.decode.DecodedProgram;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,10 +15,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.Scanner;
+import java.util.*;
 
 
 public class Controller implements Initializable {
@@ -27,7 +25,7 @@ public class Controller implements Initializable {
                     + "\nBe sure to check out any branches for works in progress " +
                     "& please create an issue if a problem is found. " +
                     "\n\t\t-Travis";
-    private static final String DEFAULT_PROGRAM_NAME = "lang-l-current-program.txt";
+    private static final String DEFAULT_PROGRAM_NAME = "current-L-program.txt";
 
     @FXML
     public TextField inputField;
@@ -166,6 +164,46 @@ public class Controller implements Initializable {
         }
     }
 
+    public void onProgramNumberDecodeClick(){
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Decode Program Number");
+        dialog.setHeaderText("Let's use some magic to turn your number into a L program.");
+        dialog.setContentText("Please enter the number");
+
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()){
+            try{
+                DecodedProgram decodedProgram  = new DecodedProgram(Integer.parseInt(result.get().trim()));
+                programArea.setText(decodedProgram.getCode());
+            }catch (Exception e){
+                println("Error: couldn't decode input into program number... " + result.get());
+            }
+        }
+    }
+
+    public void onInstructionNumbersDecodeClick(){
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Decode Instruction Numbers");
+        dialog.setHeaderText("Let's use some magic to turn your numbers into an L program.");
+        dialog.setContentText("Please enter the numbers using a comma as a separator.");
+
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()){
+            try{
+                String values = result.get().replace(" ", "");
+                DecodedProgram decodedProgram  =
+                        new DecodedProgram(
+                                Arrays.stream(
+                                        values.split(",")
+                                ).mapToInt(s -> Integer.parseInt(s.trim()))
+                                        .toArray());
+                programArea.setText(decodedProgram.getCode());
+            }catch (Exception e){
+                println("Error: couldn't decode input into instruction numbers... " + result.get());
+            }
+        }
+    }
+
     public void onAboutClick() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION, ABOUT_CONTEXT_MESSAGE);
         alert.setHeaderText("About Editor");
@@ -214,7 +252,7 @@ public class Controller implements Initializable {
                 programArea.appendText(line + "\n");
             }
         } catch (IOException e) {
-            println("No program found.");
+            println("No current program found.");
             println(e.getLocalizedMessage());
         }
     }

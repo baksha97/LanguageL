@@ -1,5 +1,7 @@
-package language.parse;
+package language.parse.decode;
 import language.memory.LanguageRuntime;
+import language.parse.Instruction;
+import language.parse.InstructionFactory;
 
 import java.util.List;
 import java.util.Map;
@@ -7,25 +9,44 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class ProgramDecoder {
+public class DecodedProgram {
     private Map<Integer, Integer> primeToPow;
-    int p;
-    InstructionFactory factory;
-    LanguageRuntime rt;
+    private InstructionFactory factory;
+    private LanguageRuntime rt;
 
-    public ProgramDecoder(int p){
-        this.p = p;
+    private DecodedProgram(){
         this.factory = new InstructionFactory();
         this.rt = new LanguageRuntime();
+    }
+
+    public DecodedProgram(int p){
+        this();
         this.primeToPow = primeToPow(p + 1);
-
         verifyNoMissingPrimes();
-
         primeToPow.forEach((prime,power) -> {
             Instruction instruction = factory.decodeInstruction(power);
             rt.addInstruction(instruction.getLabel(), instruction);
         });
+    }
 
+    public DecodedProgram(int ... instructionNumbers){
+        this();
+        for (int instructionNumber : instructionNumbers) {
+            Instruction instruction = factory.decodeInstruction(instructionNumber);
+            rt.addInstruction(instruction.getLabel(), instruction);
+        }
+    }
+
+    public String getCode(){
+        StringBuilder sb = new StringBuilder();
+        for(Map.Entry<String, List<Instruction>> entry: rt.getInstructionMap().entrySet()){
+            if(!entry.getKey().equalsIgnoreCase(Instruction.DEFAULT_UNLABELED_LABEL)){
+             sb.append("[").append(entry.getKey()).append("]\n");
+            }
+            List<Instruction> instructions = entry.getValue();
+            instructions.forEach(instruction -> sb.append(instruction.getLine()).append('\n'));
+        }
+        return sb.toString();
     }
 
     private void verifyNoMissingPrimes(){
@@ -40,12 +61,15 @@ public class ProgramDecoder {
     }
 
     private boolean isPrime(int number) {
-        return IntStream.rangeClosed(2, (int) (Math.sqrt(number)))
-                .filter(n -> (n & 0X1) != 0)
-                .allMatch(n -> number % n != 0);
+        for (int i = 2; i < number; i++) {
+            if (number % i == 0) {
+                return false;
+            }
+        }
+        return true;
     }
 
-    public List<Integer> primeNumbersTill(int n) {
+    private List<Integer> primeNumbersTill(int n) {
         return IntStream.rangeClosed(2, n)
                 .filter(this::isPrime).boxed()
                 .collect(Collectors.toList());
@@ -56,7 +80,6 @@ public class ProgramDecoder {
         TreeMap<Integer, Integer> primeToPow = new TreeMap<>();
         for (int i = 2; i <= n; i++) {
             while (n % i == 0) {
-                System.out.println(i);
                 primeToPow.put(i, primeToPow.getOrDefault(i, 0)+1);
                 n /= i;
             }

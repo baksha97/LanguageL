@@ -143,8 +143,12 @@ public class LanguageRuntime {
         return vars;
     }
 
+    public LinkedMap<String, List<Instruction>> getInstructionMap(){
+        return instructionMap;
+    }
+
     @Override
     public String toString() {
-        return instructionMap.toString();
+        return instructionMap.entrySet().toString();
     }
 }

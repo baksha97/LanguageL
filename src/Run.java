@@ -1,21 +1,16 @@
 import language.parse.InstructionFactory;
-import language.parse.ProgramDecoder;
+import language.parse.decode.DecodedProgram;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class Run {
 
     public static void main(String... args) {
         InstructionFactory f = new InstructionFactory();
-//        System.out.println(f.decodeInstruction(0));
-
-        ProgramDecoder d = new ProgramDecoder(199);
+        DecodedProgram d = new DecodedProgram(199);
         System.out.println(d);
-//        System.out.println(primeNumbersTill(5));
-//        System.out.println(primeListOf(5));
-//        System.out.println(primeToPow(200));
+        d = new DecodedProgram(3,0,2);
+        System.out.println(d.getCode());
     }
 
     public static Map<Integer, Integer> primeToPow(int number) {
@@ -31,9 +26,12 @@ public class Run {
     }
 
     private static boolean isPrime(int number) {
-        return IntStream.rangeClosed(2, (int) (Math.sqrt(number)))
-                .filter(n -> (n & 0X1) != 0)
-                .allMatch(n -> number % n != 0);
+        for (int i = 2; i < number; i++) {
+            if (number % i == 0) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static int kthPrime(int k) {
@@ -47,15 +45,15 @@ public class Run {
         return candidate-1;
     }
 
-    public static List<Integer> primeListOf(int k){
-        return primeNumbersTill(kthPrime(k));
-    }
-
-    public static List<Integer> primeNumbersTill(int n) {
-        return IntStream.rangeClosed(2, n)
-                .filter(Run::isPrime).boxed()
-                .collect(Collectors.toList());
-    }
+//    public static List<Integer> primeListOf(int k){
+//        return primeNumbersTill(kthPrime(k));
+//    }
+//
+//    public static List<Integer> primeNumbersTill(int n) {
+//        return IntStream.rangeClosed(2, n)
+//                .filter(Run::isPrime).boxed()
+//                .collect(Collectors.toList());
+//    }
 
 //    public static
 

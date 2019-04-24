@@ -1,7 +1,8 @@
 package language.parse;
 
+import language.parse.decode.GodelNumber;
+
 import java.util.Arrays;
-import java.util.HashMap;
 
 public class InstructionFactory {
     public Instruction parseInstruction(String label, String line, int lineNumber) {
@@ -26,7 +27,7 @@ public class InstructionFactory {
         }
     }
 
-    public String findLabel(int a){
+    private String decodeLabel(int a){
         if(a == 0) return null;
 
         int ith = 1;
@@ -38,7 +39,7 @@ public class InstructionFactory {
         return String.valueOf(((char) (a + 64))) + ith;
     }
 
-    public InstructionType findType(int b){
+    private InstructionType decodeType(int b){
         switch (b){
             case 0: return InstructionType.COPY;
             case 1: return InstructionType.INCREMENT;
@@ -47,7 +48,7 @@ public class InstructionFactory {
         }
     }
 
-    public String findVariable(int c){
+    private String decodeVariable(int c){
         if(c <= 1) return "Y"; // page 53; ambiguity in Godel numbers.
         String var = c % 2 == 0 ? "X" : "Z";
 
@@ -64,15 +65,13 @@ public class InstructionFactory {
 
         GodelNumber ay = new GodelNumber(z);
         int a = ay.x;
-        System.out.println(ay);
         GodelNumber bc = new GodelNumber(ay.y);
-        System.out.println(bc);
         int b = bc.x;
         int c = bc.y;
 
-        String label = findLabel(a);
-        InstructionType type = findType(b);
-        String var = findVariable(c-1); // page 51; if the variable V is mentioned in I, then c=#(V) - 1.
+        String label = decodeLabel(a);
+        InstructionType type = decodeType(b);
+        String var = decodeVariable(c-1); // page 51; if the variable V is mentioned in I, then c=#(V) - 1.
 
         switch (type){
             case COPY:
@@ -82,7 +81,7 @@ public class InstructionFactory {
             case DECREMENT:
                 return new Instruction(InstructionType.DECREMENT, -1, var + " <- " + var + " - 1", label);
             case CONDITIONAL:
-                return new Instruction(InstructionType.CONDITIONAL, -1, "IF " + var + " !=  0 GOTO " + findLabel(b-2), label);
+                return new Instruction(InstructionType.CONDITIONAL, -1, "IF " + var + " !=  0 GOTO " + decodeLabel(b-2), label);
             default: throw new IllegalArgumentException("Cannot decode another type of instruction other than the primitives.");
         }
     }
