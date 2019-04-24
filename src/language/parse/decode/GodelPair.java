@@ -1,15 +1,15 @@
 package language.parse.decode;
 
-public class GodelNumber {
+public class GodelPair {
     public final int x;
     public final int y;
 
-    public GodelNumber(int x, int y){
+    public GodelPair(int x, int y){
         this.x = x;
         this.y = y;
     }
 
-    public GodelNumber(int z){
+    public GodelPair(int z){
         z = z + 1; // 2^x * (2y + 1) - 1 = z
         //add 1 to both sides.
         int x = 0;
@@ -31,7 +31,7 @@ public class GodelNumber {
 
     @Override
     public String toString() {
-        return "GodelNumber{" +
+        return "GodelPair{" +
                 "x=" + x +
                 ", y=" + y +
                 '}';

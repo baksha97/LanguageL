@@ -1,6 +1,6 @@
 package language.parse;
 
-import language.parse.decode.GodelNumber;
+import language.parse.decode.GodelPair;
 
 import java.util.Arrays;
 
@@ -29,14 +29,12 @@ public class InstructionFactory {
 
     private String decodeLabel(int a){
         if(a == 0) return null;
-
         int ith = 1;
         while((a - 5) > 0){
             a = a - 5;
             ith++;
         }
-
-        return String.valueOf(((char) (a + 64))) + ith;
+        return String.valueOf((char) (a + 64)) + ith;
     }
 
     private InstructionType decodeType(int b){
@@ -49,7 +47,8 @@ public class InstructionFactory {
     }
 
     private String decodeVariable(int c){
-        if(c <= 1) return "Y"; // page 53; ambiguity in Godel numbers.
+        c = c + 1; // c = #(V) - 1
+        if(c == 1) return "Y"; // page 53; ambiguity in Godel numbers.
         String var = c % 2 == 0 ? "X" : "Z";
 
         int ith = 1;
@@ -61,27 +60,31 @@ public class InstructionFactory {
     }
 
 
+
     public Instruction decodeInstruction(int z) {
 
-        GodelNumber ay = new GodelNumber(z);
+        GodelPair ay = new GodelPair(z);
         int a = ay.x;
-        GodelNumber bc = new GodelNumber(ay.y);
+        GodelPair bc = new GodelPair(ay.y);
         int b = bc.x;
         int c = bc.y;
 
+        String godelNotation = "<" + a + ", " + ay.y + "> = "
+                + "<" + a + ", <" + b + ", " + c + ">>";
+
         String label = decodeLabel(a);
         InstructionType type = decodeType(b);
-        String var = decodeVariable(c-1); // page 51; if the variable V is mentioned in I, then c=#(V) - 1.
+        String var = decodeVariable(c); // page 51; if the variable V is mentioned in I, then c=#(V) - 1.
 
         switch (type){
             case COPY:
-                return new Instruction(InstructionType.COPY, -1, var + " <- " + var, label);
+                return new Instruction(InstructionType.COPY, var + " <- " + var, label, godelNotation);
             case INCREMENT:
-                return new Instruction(InstructionType.INCREMENT, -1, var + " <- " + var + " + 1", label);
+                return new Instruction(InstructionType.INCREMENT,var + " <- " + var + " + 1", label, godelNotation);
             case DECREMENT:
-                return new Instruction(InstructionType.DECREMENT, -1, var + " <- " + var + " - 1", label);
+                return new Instruction(InstructionType.DECREMENT, var + " <- " + var + " - 1", label, godelNotation);
             case CONDITIONAL:
-                return new Instruction(InstructionType.CONDITIONAL, -1, "IF " + var + " !=  0 GOTO " + decodeLabel(b-2), label);
+                return new Instruction(InstructionType.CONDITIONAL, "IF " + var + " != 0 GOTO " + decodeLabel(b-2), label, godelNotation);
             default: throw new IllegalArgumentException("Cannot decode another type of instruction other than the primitives.");
         }
     }

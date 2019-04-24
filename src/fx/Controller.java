@@ -174,8 +174,9 @@ public class Controller implements Initializable {
         if (result.isPresent()){
             try{
                 DecodedProgram decodedProgram  = new DecodedProgram(Integer.parseInt(result.get().trim()));
-                programArea.setText(decodedProgram.getCode());
+                programArea.setText(decodedProgram.getDecodedCode());
             }catch (Exception e){
+                e.printStackTrace();
                 println("Error: couldn't decode input into program number... " + result.get());
             }
         }
@@ -197,7 +198,7 @@ public class Controller implements Initializable {
                                         values.split(",")
                                 ).mapToInt(s -> Integer.parseInt(s.trim()))
                                         .toArray());
-                programArea.setText(decodedProgram.getCode());
+                programArea.setText(decodedProgram.getDecodedCode());
             }catch (Exception e){
                 println("Error: couldn't decode input into instruction numbers... " + result.get());
             }

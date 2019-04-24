@@ -13,13 +13,26 @@ public class Instruction {
     private final int instructionNumber;
     private final String line;
     private final String[] statement;
+    private final String godelNotation;
 
     public Instruction(InstructionType type, int instructionNumber, String line, String label) {
-        this.label = label != null ? label : DEFAULT_UNLABELED_LABEL;
+        this.label = label;
         this.type = type;
         this.instructionNumber = instructionNumber;
         this.line = line;
         this.statement = line.split(" ");
+        godelNotation = null;
+    }
+
+    //this constructor makes things a bit awkward by only using it temporarily for decoding
+    //should implement another way when possible.
+    public Instruction(InstructionType type, String line, String label, String godelNotation) {
+        this.label = label;
+        this.instructionNumber = -1;
+        this.type = type;
+        this.line = line;
+        this.statement = line.split(" ");
+        this.godelNotation = godelNotation;
     }
 
     public String getWorkingVariable() {
@@ -54,6 +67,11 @@ public class Instruction {
 
     public int getInstructionNumber() {
         return instructionNumber;
+    }
+
+    public String getGodelNotation(){
+        if (godelNotation == null) throw new IllegalStateException("Godel notation is null, you cannot access it since it has not been decoded.");
+        return godelNotation;
     }
 
     public String getLabel(){ return label;}

@@ -23,28 +23,41 @@ public class DecodedProgram {
         this();
         this.primeToPow = primeToPow(p + 1);
         verifyNoMissingPrimes();
-        primeToPow.forEach((prime,power) -> {
+        for (Map.Entry<Integer, Integer> entry : primeToPow.entrySet()) {
+            Integer power = entry.getValue();
             Instruction instruction = factory.decodeInstruction(power);
-            rt.addInstruction(instruction.getLabel(), instruction);
-        });
+
+            if (instruction.getLabel() != null)
+                rt.addInstruction(instruction.getLabel(), instruction);
+            else
+                rt.addInstructionToLastLabel(instruction);
+        }
     }
 
     public DecodedProgram(int ... instructionNumbers){
         this();
         for (int instructionNumber : instructionNumbers) {
             Instruction instruction = factory.decodeInstruction(instructionNumber);
-            rt.addInstruction(instruction.getLabel(), instruction);
+
+            if(instruction.getLabel() != null)
+                rt.addInstruction(instruction.getLabel(), instruction);
+            else
+                rt.addInstructionToLastLabel(instruction);
         }
     }
 
-    public String getCode(){
+    public String getDecodedCode(){
         StringBuilder sb = new StringBuilder();
+        System.out.println(rt.getInstructionMap().entrySet());
         for(Map.Entry<String, List<Instruction>> entry: rt.getInstructionMap().entrySet()){
             if(!entry.getKey().equalsIgnoreCase(Instruction.DEFAULT_UNLABELED_LABEL)){
              sb.append("[").append(entry.getKey()).append("]\n");
             }
             List<Instruction> instructions = entry.getValue();
-            instructions.forEach(instruction -> sb.append(instruction.getLine()).append('\n'));
+            instructions.forEach(instruction -> {
+                sb.append("//").append(instruction.getGodelNotation()).append('\n');
+                sb.append(instruction.getLine()).append("\n\n");
+            });
         }
         return sb.toString();
     }
