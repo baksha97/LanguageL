@@ -6,8 +6,7 @@ import org.apache.commons.collections4.map.LinkedMap;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Runtime {
-    private static final String DEFAULT_UNLABELED_LABEL = "Unlabeled Instruction";
+public class LanguageRuntime {
 
     private final LinkedMap<String, List<Instruction>> instructionMap;
     private final VariableMemory vars;
@@ -19,7 +18,7 @@ public class Runtime {
     private int instructionCount;
 
 
-    public Runtime() {
+    public LanguageRuntime() {
         this.vars = new VariableMemory();
         instructionMap = new LinkedMap<>();
         currentInstructionPosition = 0;
@@ -42,9 +41,9 @@ public class Runtime {
     }
 
     private void setupDefaultLabel() {
-        currentLabel = DEFAULT_UNLABELED_LABEL;
-        instructionMap.put(DEFAULT_UNLABELED_LABEL, new ArrayList<>());
-        instructions = instructionMap.get(DEFAULT_UNLABELED_LABEL);
+        currentLabel = Instruction.DEFAULT_UNLABELED_LABEL;
+        instructionMap.put(Instruction.DEFAULT_UNLABELED_LABEL, new ArrayList<>());
+        instructions = instructionMap.get(Instruction.DEFAULT_UNLABELED_LABEL);
     }
 
     public void addLabel(String label) {
@@ -58,6 +57,10 @@ public class Runtime {
         instructionMap.get(label).add(inst);
         instructionCount++;
         verifyInstructionPosition();
+    }
+
+    public String lastLabeledEntered(){
+        return instructionMap.lastKey();
     }
 
     public void addInstructionToLastLabel(Instruction inst) {
@@ -142,6 +145,6 @@ public class Runtime {
 
     @Override
     public String toString() {
-        return vars.toString();
+        return instructionMap.toString();
     }
 }

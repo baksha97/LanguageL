@@ -1,6 +1,6 @@
 package language;
 
-import language.memory.Runtime;
+import language.memory.LanguageRuntime;
 import language.memory.VariableMemory;
 import language.parse.Instruction;
 import language.parse.InstructionFactory;
@@ -12,7 +12,7 @@ public class LanguageLEnvironment {
 
     public final LanguageLEnvironmentViewModel vm;
     private final InstructionFactory factory;
-    private final Runtime runtime;
+    private final LanguageRuntime runtime;
     private final StringBuilder executionHistory;
     private final StringBuilder variableHistory;
     private boolean keepHistory;
@@ -24,7 +24,7 @@ public class LanguageLEnvironment {
     public LanguageLEnvironment(Scanner program, String input) {
         vm = new LanguageLEnvironmentViewModel(this);
         factory = new InstructionFactory();
-        runtime = new Runtime();
+        runtime = new LanguageRuntime();
         keepHistory = true;
         executionHistory = new StringBuilder();
         variableHistory = new StringBuilder();
@@ -44,7 +44,7 @@ public class LanguageLEnvironment {
                 String label = line.replace("[", "").replace("]", "");
                 runtime.addLabel(label);
             } else {
-                Instruction instruction = factory.getInstruction(line, ++instructionCount);
+                Instruction instruction = factory.parseInstruction(runtime.lastLabeledEntered(), line, ++instructionCount);
                 runtime.addInstructionToLastLabel(instruction);
             }
         }

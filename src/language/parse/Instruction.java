@@ -9,12 +9,16 @@ import java.util.Map;
 
 public class Instruction {
 
+    public static final String DEFAULT_UNLABELED_LABEL = "Unlabeled Instruction";
+
+    private final String label;
     private final InstructionType type;
     private final int instructionNumber;
     private final String line;
     private final String[] statement;
 
-    public Instruction(InstructionType type, int instructionNumber, String line) {
+    public Instruction(InstructionType type, int instructionNumber, String line, String label) {
+        this.label = label != null ? label : DEFAULT_UNLABELED_LABEL;
         this.type = type;
         this.instructionNumber = instructionNumber;
         this.line = line;
@@ -55,6 +59,7 @@ public class Instruction {
         return instructionNumber;
     }
 
+    public String getLabel(){ return label;}
     public String getLine() {
         return line;
     }
