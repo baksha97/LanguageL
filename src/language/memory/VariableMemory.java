@@ -14,6 +14,9 @@ public class VariableMemory {
 
     public void put(String var, int val) {
         if (val < 0) throw new IllegalArgumentException("You cannot put negative variables into the state.");
+        if(shouldAppendSubscript1(var)){
+            var = var + '1';
+        }
         vars.put(var, val);
     }
 
@@ -44,7 +47,14 @@ public class VariableMemory {
     }
 
     public int get(String var) {
+        if(shouldAppendSubscript1(var)){
+            var = var + '1';
+        }
         return vars.getOrDefault(var, 0);
+    }
+
+    private boolean shouldAppendSubscript1(String var){
+        return var.length() == 1 && !var.equalsIgnoreCase("Y");
     }
 
     @Override

@@ -1,4 +1,4 @@
-package language.parse.decode;
+package language.parse.numeric;
 
 public class GodelPair {
     public final int x;

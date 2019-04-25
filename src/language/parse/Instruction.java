@@ -46,7 +46,7 @@ public class Instruction {
         return statement[LanguageIndices.Copy.VARIABLE_TO_COPY];
     }
 
-    private String conditionalLabel() {
+    public String conditionalLabel() {
         if (type == InstructionType.CONDITIONAL)
             return statement[LanguageIndices.Conditional.POSSIBLE_NEW_LABEL];
         return null;

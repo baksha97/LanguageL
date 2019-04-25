@@ -6,7 +6,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import language.LanguageLEnvironment;
-import language.parse.decode.DecodedProgram;
+import language.parse.numeric.DecodedProgram;
 
 import java.io.File;
 import java.io.IOException;
@@ -115,8 +115,8 @@ public class Controller implements Initializable {
             env = new LanguageLEnvironment(programArea.getText().trim(), inputField.getText().trim());
             needsReset = false;
         } catch (Exception e) {
-            updateInterface();
             println("Invalid input.");
+            updateInterface();
             e.printStackTrace();
             println(e.getLocalizedMessage());
             needsReset = true;
@@ -177,7 +177,7 @@ public class Controller implements Initializable {
                 programArea.setText(decodedProgram.getDecodedCode());
             }catch (Exception e){
                 e.printStackTrace();
-                println("Error: couldn't decode input into program number... " + result.get());
+                println("Error: couldn't numeric input into program number... " + result.get());
             }
         }
     }
@@ -200,7 +200,7 @@ public class Controller implements Initializable {
                                         .toArray());
                 programArea.setText(decodedProgram.getDecodedCode());
             }catch (Exception e){
-                println("Error: couldn't decode input into instruction numbers... " + result.get());
+                println("Error: couldn't numeric input into instruction numbers... " + result.get());
             }
         }
     }
