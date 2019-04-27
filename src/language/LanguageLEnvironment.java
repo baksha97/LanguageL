@@ -5,6 +5,7 @@ import language.memory.VariableMemory;
 import language.parse.Instruction;
 import language.parse.InstructionFactory;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 
@@ -12,6 +13,11 @@ public class LanguageLEnvironment {
 
     public final LanguageLEnvironmentViewModel vm;
     private final InstructionFactory factory;
+
+    public LanguageRuntime getRuntime() {
+        return runtime;
+    }
+
     private final LanguageRuntime runtime;
     private final StringBuilder executionHistory;
     private final StringBuilder variableHistory;

@@ -3,16 +3,19 @@ package language.parse.numeric;
 import language.parse.Instruction;
 import language.parse.InstructionType;
 
+import java.math.BigInteger;
+
 public final class Decoder {
 
-    private String decodeLabel(int a){
-        if(a == 0) return null;
+    private String decodeLabel(BigInteger a){
+        int label = a.intValue();
+        if(label == 0) return null;
         int ith = 1;
-        while((a - 5) > 0){
-            a = a - 5;
+        while((label - 5) > 0){
+            label = label - 5;
             ith++;
         }
-        return String.valueOf((char) (a + 64)) + ith;
+        return String.valueOf((char) (label + 64)) + ith;
     }
 
     private InstructionType decodeType(int b){
@@ -39,20 +42,20 @@ public final class Decoder {
 
 
 
-    public Instruction decodeInstruction(int z) {
+    public Instruction decodeInstruction(BigInteger z) {
 
         GodelPair ay = new GodelPair(z);
-        int a = ay.x;
-        GodelPair bc = new GodelPair(ay.y);
-        int b = bc.x;
-        int c = bc.y;
+        BigInteger a = ay.getX();
+        GodelPair bc = new GodelPair(ay.getY());
+        BigInteger b = bc.getX();
+        BigInteger c = bc.getY();
 
-        String godelNotation = "<" + a + ", " + ay.y + "> = "
+        String godelNotation = "<" + a + ", " + ay.getY() + "> = "
                 + "<" + a + ", <" + b + ", " + c + ">>";
 
         String label = decodeLabel(a);
-        InstructionType type = decodeType(b);
-        String var = decodeVariable(c); // page 51; if the variable V is mentioned in I, then c=#(V) - 1.
+        InstructionType type = decodeType(b.intValueExact());
+        String var = decodeVariable(c.intValueExact()); // page 51; if the variable V is mentioned in I, then c=#(V) - 1.
 
         switch (type){
             case COPY:

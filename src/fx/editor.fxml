@@ -19,6 +19,11 @@
             <MenuItem mnemonicParsing="false" onAction="#onOpenClick" text="Open" />
             <MenuItem fx:id="onSaveAsClick" mnemonicParsing="false" onAction="#onSaveAsClick" text="Save as..." />
         </Menu>
+      <Menu mnemonicParsing="false" text="Encode">
+        <items>
+            <MenuItem mnemonicParsing="false" onAction="#onInstructionEncodeClick" text="Encode Instructions" />
+        </items>
+      </Menu>
       <Menu mnemonicParsing="false" text="Decode">
         <items>
           <MenuItem mnemonicParsing="false" onAction="#onProgramNumberDecodeClick" text="Program Number" />

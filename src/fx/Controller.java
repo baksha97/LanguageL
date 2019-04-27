@@ -7,9 +7,11 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import language.LanguageLEnvironment;
 import language.parse.numeric.DecodedProgram;
+import language.parse.numeric.Encoder;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -164,6 +166,23 @@ public class Controller implements Initializable {
         }
     }
 
+    public void onInstructionEncodeClick(){
+        try {
+            //Temporary -- to quickly encode a program
+            LanguageLEnvironment temp = new LanguageLEnvironment(programArea.getText().trim(), "Y=0");
+            Encoder encoder = new Encoder(temp.getRuntime());
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Encoded Instruction");
+            alert.setHeaderText("Here are your instruction numbers...");
+            alert.setContentText(String.valueOf(encoder.getInstructionNumbers()));
+            alert.showAndWait();
+        }catch (Exception e){
+            println("Something went wrong trying to encode your program!");
+            println("Make sure your program is made up of only basic instructions and conform only to the language syntax.");
+        }
+    }
+
     public void onProgramNumberDecodeClick(){
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Decode Program Number");
@@ -173,7 +192,7 @@ public class Controller implements Initializable {
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent()){
             try{
-                DecodedProgram decodedProgram  = new DecodedProgram(Integer.parseInt(result.get().trim()));
+                DecodedProgram decodedProgram  = new DecodedProgram(new BigInteger(result.get().trim()));
                 programArea.setText(decodedProgram.getDecodedCode());
             }catch (Exception e){
                 e.printStackTrace();
@@ -196,8 +215,8 @@ public class Controller implements Initializable {
                         new DecodedProgram(
                                 Arrays.stream(
                                         values.split(",")
-                                ).mapToInt(s -> Integer.parseInt(s.trim()))
-                                        .toArray());
+                                ).map(BigInteger::new).toArray(BigInteger[]::new)
+                        );
                 programArea.setText(decodedProgram.getDecodedCode());
             }catch (Exception e){
                 println("Error: couldn't numeric input into instruction numbers... " + result.get());

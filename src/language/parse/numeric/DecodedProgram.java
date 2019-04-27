@@ -3,11 +3,13 @@ import language.memory.LanguageRuntime;
 import language.parse.Instruction;
 import util.Prime;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 public class DecodedProgram {
-    private Map<Integer, Integer> primeToPow;
+    private Map<BigInteger, Integer> primeToPow;
     private Decoder decoder;
     private LanguageRuntime rt;
 
@@ -16,12 +18,12 @@ public class DecodedProgram {
         this.rt = new LanguageRuntime();
     }
 
-    public DecodedProgram(int p){
+    public DecodedProgram(BigInteger p){
         this();
-        this.primeToPow = Prime.primeToPow(p + 1);
+        this.primeToPow = Prime.primeToPow(p.add(BigInteger.ONE));
         verifyNoMissingPrimes();
-        for (Map.Entry<Integer, Integer> entry : primeToPow.entrySet()) {
-            Integer power = entry.getValue();
+        for (Map.Entry<BigInteger, Integer> entry : primeToPow.entrySet()) {
+            BigInteger power = BigInteger.valueOf(entry.getValue());
             Instruction instruction = decoder.decodeInstruction(power);
 
             if (instruction.getLabel() != null)
@@ -31,9 +33,9 @@ public class DecodedProgram {
         }
     }
 
-    public DecodedProgram(int ... instructionNumbers){
+    public DecodedProgram(BigInteger ... instructionNumbers){
         this();
-        for (int instructionNumber : instructionNumbers) {
+        for (BigInteger instructionNumber : instructionNumbers) {
             Instruction instruction = decoder.decodeInstruction(instructionNumber);
 
             if(instruction.getLabel() != null)
@@ -58,10 +60,9 @@ public class DecodedProgram {
         }
         return sb.toString();
     }
-
     private void verifyNoMissingPrimes(){
-        int maxPrime = primeToPow.values().stream().mapToInt(i -> i).max().orElse(0);
-        List<Integer> primeNumbersTillMax = Prime.primeNumbersTill(maxPrime);
+        BigInteger maxPrime = primeToPow.keySet().stream().max(BigInteger::compareTo).orElseThrow(NoSuchElementException::new);
+        List<BigInteger> primeNumbersTillMax = Prime.primeNumbersTill(maxPrime);
         primeNumbersTillMax.forEach(prime ->{
             if(!primeToPow.containsKey(prime)){
                 primeToPow.put(prime, 0);
@@ -69,6 +70,16 @@ public class DecodedProgram {
         });
 
     }
+//    private void verifyNoMissingPrimes(){
+//        int maxPrime = primeToPow.values().stream().mapToInt(i -> i).max().orElse(0);
+//        List<BigInteger> primeNumbersTillMax = Prime.primeNumbersTill(maxPrime);
+//        primeNumbersTillMax.forEach(prime ->{
+//            if(!primeToPow.containsKey(prime)){
+//                primeToPow.put(prime, 0);
+//            }
+//        });
+//
+//    }
 
 
 
