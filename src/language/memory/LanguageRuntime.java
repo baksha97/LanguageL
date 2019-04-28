@@ -50,7 +50,7 @@ public class LanguageRuntime {
         if (!instructionMap.containsKey(label)) instructionMap.put(label, new ArrayList<>());
     }
 
-    //I am implementing it this way although not publicly used to allow input such as "[A]: GOTO B" in the future.
+
     public void addInstruction(String label, Instruction inst) {
         addLabel(label);
         initVariablesFromInstruction(inst);
@@ -87,7 +87,8 @@ public class LanguageRuntime {
             case ZERO:
                 vars.reset(instruction.getWorkingVariable());
                 break;
-            case COPY:
+            case DUMMY: //same thing for operation
+            case COPY9:
                 vars.replaceWith(instruction.getWorkingVariable(), instruction.getCopyVariable());
                 break;
             case GOTO:
@@ -96,7 +97,7 @@ public class LanguageRuntime {
                 if (instruction.nextLabel(vars) != null) {
                     currentLabel = instruction.nextLabel(vars);
                     currentInstructionPosition = 0;
-                    instructions = instructionMap.get(instruction.nextLabel(vars));
+                    instructions = getLabelInstructions(instruction.nextLabel(vars));
                 }
                 break;
             default:
@@ -113,9 +114,14 @@ public class LanguageRuntime {
             if (currentLabelIndex != -1 && currentLabelIndex != instructionMap.size() - 1) {
                 currentInstructionPosition = 0;
                 currentLabel = instructionMap.get(currentLabelIndex + 1);
-                instructions = instructionMap.get(currentLabel);
+                instructions = getLabelInstructions(currentLabel);
             }
         }
+    }
+
+    public List<Instruction> getLabelInstructions(String currentLabel){
+        if(currentLabel.length() == 1) this.currentLabel = currentLabel + "1";
+        return instructionMap.get(currentLabel);
     }
 
     public int getExecutionCount() {

@@ -7,33 +7,29 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 
 public class Encoder {
-    public ArrayList<BigInteger> getInstructionNumbers() {
-        return instructionNumbers;
-    }
 
-    private ArrayList<BigInteger> instructionNumbers;
+    private ArrayList<EncoderData> data;
+
 
     public Encoder(LanguageRuntime rt){
-        instructionNumbers = new ArrayList<>();
+        data = new ArrayList<>();
         rt.getInstructionMap().forEach((label, list) ->{
-            list.forEach(item -> instructionNumbers.add(encode(item)));
+            list.forEach(item -> {
+                data.add(encode(item));
+            });
         });
-
-
-
 
     }
 
-    public BigInteger encode(Instruction inst){
+    public EncoderData encode(Instruction inst){
         int a = encodeLabel(inst);
         int b = encodeType(inst);
         int c = encodeVariable(inst);
         GodelPair bc = new GodelPair(b,c);
         GodelPair ay = new GodelPair(BigInteger.valueOf(a), bc.getZ());
 
-        return ay.getZ();
+        return new EncoderData(inst, ay, bc, ay.getZ());
     }
-
 
     private int encodeLabel(Instruction inst){
         if(inst.getLabel() == null || inst.getLabel().equals(Instruction.DEFAULT_UNLABELED_LABEL)) return 0;
@@ -52,7 +48,7 @@ public class Encoder {
 
     private int encodeType(Instruction inst){
         switch (inst.getType()){
-            case COPY: return 0;
+            case DUMMY: return 0;
             case INCREMENT: return 1;
             case DECREMENT: return 2;
             case CONDITIONAL: return encodeLabel(inst.conditionalLabel()) + 2;
@@ -72,8 +68,38 @@ public class Encoder {
         else if(var.charAt(0) == 'X') offset = offset + 1;
         else if(var.charAt(0) == 'Z') offset = offset + 2;
         else throw new IllegalArgumentException("Cannot encode variables other than X, Z, & Y.");
-        System.out.println(offset);
-
         return offset + (ith - 1) * 2;
+    }
+
+    public ArrayList<EncoderData> getEncoderData(){
+        return this.data;
+    }
+
+    public static class EncoderData{
+        Instruction inst;
+
+        public BigInteger getInstructionNumber() {
+            return instructionNumber;
+        }
+
+        BigInteger instructionNumber;
+        GodelPair ay;
+        GodelPair bc;
+
+        private EncoderData(Instruction inst, GodelPair ay, GodelPair bc, BigInteger instructionNumber) {
+            this.inst = inst;
+            this.instructionNumber = instructionNumber;
+            this.ay = ay;
+            this.bc = bc;
+        }
+
+        @Override
+        public String toString() {
+            return  "Instruction=" + inst +
+                    "\n\tinstructionNumber=" + instructionNumber +
+                    "\n\tay=" + ay +
+                    "\n\tbc=" + bc +
+                    "\n";
+        }
     }
 }

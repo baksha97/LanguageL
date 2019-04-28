@@ -42,6 +42,9 @@ public class LanguageLEnvironment {
     private void initializeProgram(Scanner p) {
         //initialize instructionMap
         int instructionCount = 0;
+
+        boolean shouldSetLastLabelForNextInstruction = false;
+
         while (p.hasNextLine()) {
             String line = p.nextLine().trim();
             if (line.isEmpty() || line.contains("//")) continue;
@@ -49,9 +52,17 @@ public class LanguageLEnvironment {
             if (line.contains("[") && line.contains("]")) {
                 String label = line.replace("[", "").replace("]", "");
                 runtime.addLabel(label);
+                shouldSetLastLabelForNextInstruction = true;
             } else {
-                Instruction instruction = factory.parseInstruction(runtime.lastLabeledEntered(), line, ++instructionCount);
-                runtime.addInstructionToLastLabel(instruction);
+                Instruction inst;
+                if(shouldSetLastLabelForNextInstruction) {
+                    inst = factory.parseInstruction(runtime.lastLabeledEntered(), line, ++instructionCount);
+                    shouldSetLastLabelForNextInstruction = false;
+                }
+                else{
+                    inst = factory.parseInstruction(null, line, ++instructionCount);
+                }
+                runtime.addInstructionToLastLabel(inst);
             }
         }
         p.close();

@@ -20,7 +20,7 @@ public final class Decoder {
 
     private InstructionType decodeType(int b){
         switch (b){
-            case 0: return InstructionType.COPY;
+            case 0: return InstructionType.DUMMY;
             case 1: return InstructionType.INCREMENT;
             case 2: return InstructionType.DECREMENT;
             default: return InstructionType.CONDITIONAL;
@@ -58,14 +58,15 @@ public final class Decoder {
         String var = decodeVariable(c.intValueExact()); // page 51; if the variable V is mentioned in I, then c=#(V) - 1.
 
         switch (type){
-            case COPY:
-                return new Instruction(InstructionType.COPY, var + " <- " + var, label, godelNotation);
+            case DUMMY:
+                return new Instruction(InstructionType.DUMMY, var + " <- " + var, label, godelNotation);
             case INCREMENT:
                 return new Instruction(InstructionType.INCREMENT,(var + " <- " + var + " + 1"), label, godelNotation);
             case DECREMENT:
                 return new Instruction(InstructionType.INCREMENT,(var + " <- " + var + " - 1"), label, godelNotation);
             case CONDITIONAL:
-                return new Instruction(InstructionType.CONDITIONAL, ("IF " + var + " != 0 GOTO " + label), label, godelNotation);
+                BigInteger conditionalLabelEncoded = b.subtract(BigInteger.valueOf(2));
+                return new Instruction(InstructionType.CONDITIONAL, ("IF " + var + " != 0 GOTO " + decodeLabel(conditionalLabelEncoded)), label, godelNotation);
             default: throw new IllegalArgumentException("Cannot decode another type of instruction other than the primitives.");
         }
     }

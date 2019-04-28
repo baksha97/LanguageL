@@ -42,7 +42,7 @@ public class Instruction {
     }
 
     public String getCopyVariable() {
-        if (type != InstructionType.COPY) return null;
+        if (type != InstructionType.COPY9) return null;
         return statement[LanguageIndices.Copy.VARIABLE_TO_COPY];
     }
 

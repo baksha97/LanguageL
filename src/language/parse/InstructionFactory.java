@@ -22,8 +22,10 @@ public class InstructionFactory {
             else if (parts[0].equalsIgnoreCase("GoTo"))
                 return new Instruction(InstructionType.GOTO, lineNumber, line, label);
             else if (parts[2].equals("0")) return new Instruction(InstructionType.ZERO, lineNumber, line, label);
+            else if (parts.length == 3 && parts[0].equals(parts[2]))
+                return new Instruction(InstructionType.DUMMY, lineNumber, line, label);
             else if (parts.length == 3)
-                return new Instruction(InstructionType.COPY, lineNumber, line, label);
+                return new Instruction(InstructionType.COPY9, lineNumber, line, label);
             else if (parts[2].equals(possibleVarName) && parts[3].equals("+") && parts[4].equals("1"))
                 return new Instruction(InstructionType.INCREMENT, lineNumber, line, label);
             else if (parts[2].equals(possibleVarName) && parts[3].equals("-") && parts[4].equals("1"))

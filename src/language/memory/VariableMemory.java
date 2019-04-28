@@ -21,6 +21,9 @@ public class VariableMemory {
     }
 
     public void initIfAbsent(String var) {
+        if(shouldAppendSubscript1(var)){
+            var = var + '1';
+        }
         if (!vars.containsKey(var)) put(var, 0);
     }
 

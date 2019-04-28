@@ -4,6 +4,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.stage.FileChooser;
 import language.LanguageLEnvironment;
 import language.parse.numeric.DecodedProgram;
@@ -172,11 +174,48 @@ public class Controller implements Initializable {
             LanguageLEnvironment temp = new LanguageLEnvironment(programArea.getText().trim(), "Y=0");
             Encoder encoder = new Encoder(temp.getRuntime());
 
+            StringBuilder sb = new StringBuilder();
+
+            for (Encoder.EncoderData encoderData : encoder.getEncoderData()) {
+                sb.append(encoderData).append("\n");
+            }
+
+            sb.append("\n\n\n");
+
+            for (Encoder.EncoderData encoderData : encoder.getEncoderData()) {
+                sb.append(encoderData.getInstructionNumber()).append(", ");
+            }
+
+            String alertData = sb.toString();
+
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Encoded Instruction");
             alert.setHeaderText("Here are your instruction numbers...");
-            alert.setContentText(String.valueOf(encoder.getInstructionNumbers()));
+
+
+            TextArea textArea = new TextArea(alertData);
+            textArea.setEditable(false);
+            textArea.setWrapText(true);
+
+            textArea.setMaxWidth(Double.MAX_VALUE);
+            textArea.setMaxHeight(Double.MAX_VALUE);
+            GridPane.setVgrow(textArea, Priority.ALWAYS);
+            GridPane.setHgrow(textArea, Priority.ALWAYS);
+
+            GridPane pane = new GridPane();
+            pane.setMaxWidth(Double.MAX_VALUE);
+            pane.add(textArea, 0, 0);
+
+            alert.getDialogPane().setContent(pane);
+            alert.setResizable(true);
+
             alert.showAndWait();
+
+
+
+
+
+
         }catch (Exception e){
             println("Something went wrong trying to encode your program!");
             println("Make sure your program is made up of only basic instructions and conform only to the language syntax.");
@@ -184,6 +223,7 @@ public class Controller implements Initializable {
     }
 
     public void onProgramNumberDecodeClick(){
+        println("Decoding program...");
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Decode Program Number");
         dialog.setHeaderText("Let's use some magic to turn your number into a L program.");
@@ -202,6 +242,7 @@ public class Controller implements Initializable {
     }
 
     public void onInstructionNumbersDecodeClick(){
+        println("Decoding instructions...");
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Decode Instruction Numbers");
         dialog.setHeaderText("Let's use some magic to turn your numbers into an L program.");

@@ -77,10 +77,6 @@ public class GodelPair {
 
     @Override
     public String toString() {
-        return "GodelPair{" +
-                "x=" + x +
-                ", y=" + y +
-                ", z=" + z +
-                '}';
+        return "GodelPair{<" + x + ", "+ y +"> = " + z + '}';
     }
 }

@@ -17,7 +17,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("editor.fxml"));
-        primaryStage.setTitle("Language L Editor v4.24.2019");
+        primaryStage.setTitle("Language L Editor v4.28.2019");
 
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
