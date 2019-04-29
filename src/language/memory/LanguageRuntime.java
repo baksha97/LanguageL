@@ -87,7 +87,9 @@ public class LanguageRuntime {
             case ZERO:
                 vars.reset(instruction.getWorkingVariable());
                 break;
-            case DUMMY: //same thing for operation
+            case DUMMY:
+                vars.replaceWith(instruction.getWorkingVariable(), instruction.getWorkingVariable());
+                break;
             case COPY9:
                 vars.replaceWith(instruction.getWorkingVariable(), instruction.getCopyVariable());
                 break;
