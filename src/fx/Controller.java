@@ -168,7 +168,7 @@ public class Controller implements Initializable {
         }
     }
 
-    public void onInstructionEncodeClick(){
+    public void onInstructionEncodeClick() {
         try {
             //Temporary -- to quickly encode a program
             LanguageLEnvironment temp = new LanguageLEnvironment(programArea.getText().trim(), "Y=0");
@@ -212,17 +212,13 @@ public class Controller implements Initializable {
             alert.showAndWait();
 
 
-
-
-
-
-        }catch (Exception e){
+        } catch (Exception e) {
             println("Something went wrong trying to encode your program!");
             println("Make sure your program is made up of only basic instructions and conform only to the language syntax.");
         }
     }
 
-    public void onProgramNumberDecodeClick(){
+    public void onProgramNumberDecodeClick() {
         println("Decoding program...");
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Decode Program Number");
@@ -230,18 +226,18 @@ public class Controller implements Initializable {
         dialog.setContentText("Please enter the number");
 
         Optional<String> result = dialog.showAndWait();
-        if (result.isPresent()){
-            try{
-                DecodedProgram decodedProgram  = new DecodedProgram(new BigInteger(result.get().trim()));
+        if (result.isPresent()) {
+            try {
+                DecodedProgram decodedProgram = new DecodedProgram(new BigInteger(result.get().trim()));
                 programArea.setText(decodedProgram.getDecodedCode());
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
                 println("Error: couldn't numeric input into program number... " + result.get());
             }
         }
     }
 
-    public void onInstructionNumbersDecodeClick(){
+    public void onInstructionNumbersDecodeClick() {
         println("Decoding instructions...");
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Decode Instruction Numbers");
@@ -249,17 +245,17 @@ public class Controller implements Initializable {
         dialog.setContentText("Please enter the numbers using a comma as a separator.");
 
         Optional<String> result = dialog.showAndWait();
-        if (result.isPresent()){
-            try{
+        if (result.isPresent()) {
+            try {
                 String values = result.get().replace(" ", "");
-                DecodedProgram decodedProgram  =
+                DecodedProgram decodedProgram =
                         new DecodedProgram(
                                 Arrays.stream(
                                         values.split(",")
                                 ).map(BigInteger::new).toArray(BigInteger[]::new)
                         );
                 programArea.setText(decodedProgram.getDecodedCode());
-            }catch (Exception e){
+            } catch (Exception e) {
                 println("Error: couldn't numeric input into instruction numbers... " + result.get());
             }
         }

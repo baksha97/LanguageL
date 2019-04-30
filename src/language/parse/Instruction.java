@@ -42,7 +42,7 @@ public class Instruction {
     }
 
     public String getCopyVariable() {
-        if (type != InstructionType.COPY9) return null;
+        if (type != InstructionType.COPY) return null;
         return statement[LanguageIndices.Copy.VARIABLE_TO_COPY];
     }
 
@@ -69,12 +69,16 @@ public class Instruction {
         return instructionNumber;
     }
 
-    public String getGodelNotation(){
-        if (godelNotation == null) throw new IllegalStateException("Godel notation is null, you cannot access it since it has not been decoded.");
+    public String getGodelNotation() {
+        if (godelNotation == null)
+            throw new IllegalStateException("Godel notation is null, you cannot access it since it has not been decoded.");
         return godelNotation;
     }
 
-    public String getLabel(){ return label;}
+    public String getLabel() {
+        return label;
+    }
+
     public String getLine() {
         return line;
     }

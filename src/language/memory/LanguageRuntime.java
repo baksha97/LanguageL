@@ -59,7 +59,7 @@ public class LanguageRuntime {
         verifyInstructionPosition();
     }
 
-    public String lastLabeledEntered(){
+    public String lastLabeledEntered() {
         return instructionMap.lastKey();
     }
 
@@ -90,7 +90,7 @@ public class LanguageRuntime {
             case DUMMY:
                 vars.replaceWith(instruction.getWorkingVariable(), instruction.getWorkingVariable());
                 break;
-            case COPY9:
+            case COPY:
                 vars.replaceWith(instruction.getWorkingVariable(), instruction.getCopyVariable());
                 break;
             case GOTO:
@@ -101,9 +101,10 @@ public class LanguageRuntime {
                     currentInstructionPosition = 0;
                     instructions = getLabelInstructions(instruction.nextLabel(vars));
                 }
+                else throw new IllegalStateException("PARSE ERROR: Instruction does not have a label to go to: " + instruction);
                 break;
-            default:
-                throw new IllegalStateException("Instruction not executable: " + instruction);
+//            default:
+//                throw new IllegalStateException("Instruction not executable: " + instruction);
         }
 
         verifyInstructionPosition();
@@ -121,8 +122,8 @@ public class LanguageRuntime {
         }
     }
 
-    public List<Instruction> getLabelInstructions(String currentLabel){
-        if(currentLabel.length() == 1) this.currentLabel = currentLabel + "1";
+    public List<Instruction> getLabelInstructions(String currentLabel) {
+        if (currentLabel.length() == 1) this.currentLabel = currentLabel + "1";
         return instructionMap.get(currentLabel);
     }
 
@@ -151,7 +152,7 @@ public class LanguageRuntime {
         return vars;
     }
 
-    public LinkedMap<String, List<Instruction>> getInstructionMap(){
+    public LinkedMap<String, List<Instruction>> getInstructionMap() {
         return instructionMap;
     }
 

@@ -1,11 +1,3 @@
-import language.parse.Instruction;
-import language.parse.InstructionType;
-import language.parse.numeric.Decoder;
-import language.parse.numeric.Encoder;
-import language.parse.numeric.GodelPair;
-
-import java.math.BigInteger;
-
 public class Run {
 
     public static void main(String... args) {

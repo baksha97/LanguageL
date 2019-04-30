@@ -7,13 +7,13 @@ public class GodelPair {
     private final BigInteger y;
     private final BigInteger z;
 
-    public GodelPair(long x, long y){
+    public GodelPair(long x, long y) {
         this.x = BigInteger.valueOf(x);
         this.y = BigInteger.valueOf(y);
         this.z = findZ(this.x, this.y);
     }
 
-    public GodelPair(long z){
+    public GodelPair(long z) {
         this.z = BigInteger.valueOf(z);
         BigInteger[] tupleOfXY = findXY(this.z);
 
@@ -21,13 +21,13 @@ public class GodelPair {
         this.y = tupleOfXY[1];
     }
 
-    public GodelPair(BigInteger x, BigInteger y){
+    public GodelPair(BigInteger x, BigInteger y) {
         this.x = x;
         this.y = y;
-        this.z = findZ(x,y);
+        this.z = findZ(x, y);
     }
 
-    public GodelPair(BigInteger z){
+    public GodelPair(BigInteger z) {
         this.z = z;
         BigInteger[] tupleOfXY = findXY(z);
 
@@ -35,21 +35,21 @@ public class GodelPair {
         this.y = tupleOfXY[1];
     }
 
-    private BigInteger findZ(BigInteger x, BigInteger y){
+    private BigInteger findZ(BigInteger x, BigInteger y) {
         BigInteger leftHandSize = BigInteger.valueOf(2).pow(x.intValue())
                 .multiply(
                         BigInteger.valueOf(2).multiply(y)
-                        .add(BigInteger.ONE)
+                                .add(BigInteger.ONE)
                 );// 2^x * (2y + 1)
         leftHandSize = leftHandSize.subtract(BigInteger.ONE); // 2^x * (2y + 1) - 1 = z
         return leftHandSize;
     }
 
-    private BigInteger[] findXY(BigInteger z){
+    private BigInteger[] findXY(BigInteger z) {
         z = z.add(BigInteger.ONE); // 2^x * (2y + 1) - 1 = z
         //add 1 to both sides.
         BigInteger x = BigInteger.ZERO;
-        while (z.mod(BigInteger.valueOf(2)).equals(BigInteger.ZERO)){
+        while (z.mod(BigInteger.valueOf(2)).equals(BigInteger.ZERO)) {
             z = z.divide(BigInteger.valueOf(2));
             x = x.add(BigInteger.ONE);
         }
@@ -60,7 +60,7 @@ public class GodelPair {
         z = z.subtract(BigInteger.ONE);
         BigInteger y = z.divide(BigInteger.valueOf(2));
 
-        return new BigInteger[]{x,y};
+        return new BigInteger[]{x, y};
     }
 
     public BigInteger getX() {
@@ -77,6 +77,6 @@ public class GodelPair {
 
     @Override
     public String toString() {
-        return "GodelPair{<" + x + ", "+ y +"> = " + z + '}';
+        return "GodelPair{<" + x + ", " + y + "> = " + z + '}';
     }
 }

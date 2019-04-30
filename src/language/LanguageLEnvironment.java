@@ -5,7 +5,6 @@ import language.memory.VariableMemory;
 import language.parse.Instruction;
 import language.parse.InstructionFactory;
 
-import java.util.Arrays;
 import java.util.Scanner;
 
 
@@ -13,16 +12,10 @@ public class LanguageLEnvironment {
 
     public final LanguageLEnvironmentViewModel vm;
     private final InstructionFactory factory;
-
-    public LanguageRuntime getRuntime() {
-        return runtime;
-    }
-
     private final LanguageRuntime runtime;
     private final StringBuilder executionHistory;
     private final StringBuilder variableHistory;
     private boolean keepHistory;
-
     public LanguageLEnvironment(String program, String input) {
         this(new Scanner(program), input);
     }
@@ -37,6 +30,10 @@ public class LanguageLEnvironment {
         initializeVariables(input);
         initializeProgram(program);
         keepHistory();
+    }
+
+    public LanguageRuntime getRuntime() {
+        return runtime;
     }
 
     private void initializeProgram(Scanner p) {
@@ -55,11 +52,10 @@ public class LanguageLEnvironment {
                 shouldSetLastLabelForNextInstruction = true;
             } else {
                 Instruction inst;
-                if(shouldSetLastLabelForNextInstruction) {
+                if (shouldSetLastLabelForNextInstruction) {
                     inst = factory.parseInstruction(runtime.lastLabeledEntered(), line, ++instructionCount);
                     shouldSetLastLabelForNextInstruction = false;
-                }
-                else{
+                } else {
                     inst = factory.parseInstruction(null, line, ++instructionCount);
                 }
                 runtime.addInstructionToLastLabel(inst);
